@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/show_intestial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Show Interstitial" />
+
+    <RelativeLayout
+        android:id="@+id/add_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/gnt_outline_shape"
+        android:minHeight="@dimen/_130sdp">
+
+        <com.module.ads.TemplateView
+            android:id="@+id/nativeTemplateView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:gnt_template_type="@layout/gnt_small_template_view" />
+
+        <TextView
+            android:id="@+id/temp_add_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ad_will_display_hare" />
+    </RelativeLayout>
+
+</RelativeLayout>

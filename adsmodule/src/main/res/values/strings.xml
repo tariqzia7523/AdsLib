@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="is_purchsed">IS_PURCHESED</string>
+    <string name="user_reviwed">USER_REVIEWED</string>
+    <string name="user_intro">USER_INTRO</string>
+    <string name="app_count">APP_COUNT</string>
+    <string name="my_pref">MY_PREF</string>
+    <string name="loading_wait">Loading Ad</string>
+    <string name="ad_will_display_hare">Loading Ad</string>
+    <string name="privacy_accepted">PRIVACY_ACCPEPTED</string>
+    <string name="rewarded_video_add_count">REWARDED_VIDEO_ADD_COUNT</string>
+    <string name="rewarded_video_add_count_cuurent">Rewarded_video_add_count_current</string>
+    <string name="banner_id">BANNER_ID</string>
+    <string name="inter_id">INTER_ID</string>
+    <string name="native_id">NATIVE_ID</string>
+    <string name="reward_id">REWARD_ID</string>
+    <string name="app_open_id">APP_OPEN_ID</string>
+</resources>
