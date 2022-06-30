@@ -9,7 +9,7 @@ This project contains library for easy implementation of ad mob according to ad 
   
   then following line in app gradle
   
- implementation 'com.github.tariqzia7523:AdsLib:1.0.1'
+ implementation 'com.github.tariqzia7523:AdsLib:1.0.0'
 
 # Usage 
 you can refer to MainActivity in sample project
