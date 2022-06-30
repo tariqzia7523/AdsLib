@@ -18,8 +18,9 @@ class MainActivity : AppCompatActivity() {
         mySharedPref.rewardID = "orignal_reward_id"
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
-
         AddInitilizer.adCounter = 0
+
+
         addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG){
             // on add close call back will run in this fun
 
