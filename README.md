@@ -117,9 +117,9 @@ addInitilizer.goAddFree()
  
         val admobNativeAdAdapter: AdmobNativeAdAdapter = AdmobNativeAdAdapter.Builder.with( this@MainActivity, myAdapterForAppList, "small", BuildConfig.DEBUG).adItemInterval(8).setContext(this@MainActivity).build()
  
-        recylerView.adapter = admobNativeAdAdapter
- 
         recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
+ 
+       recylerView.adapter = admobNativeAdAdapter
  
 
 
