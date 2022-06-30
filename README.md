@@ -69,7 +69,7 @@ make a global variable
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_alignParentBottom="true">
 
-        <com.module.adsmodule.TemplateView
+        <com.module.ads.TemplateView
             android:id="@+id/nativeTemplateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
