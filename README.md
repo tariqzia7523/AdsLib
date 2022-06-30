@@ -20,6 +20,7 @@ first of all set orignal id and ad count on splash using following code,orignal 
         mySharedPref.rewardID = "orignal_reward_id"
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
+        mySharedPref.appOpenID = "orignal_app_opn_id"
         AddInitilizer.adCounter = 0
         //ad count refers to show interstial ad after these number of clicks
 
