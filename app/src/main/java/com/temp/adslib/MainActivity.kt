@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.module.ads.AddInitilizer
+import com.module.ads.MySharedPref
 
 
 class MainActivity : AppCompatActivity() {
@@ -11,6 +12,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val mySharedPref = MySharedPref(this)
+        mySharedPref.bannerID = "orignal_banner_id"
+        mySharedPref.rewardID = "orignal_reward_id"
+        mySharedPref.nativeID = "orignal_native_id"
+        mySharedPref.interID = "orignal_interstitial_id"
 
         AddInitilizer.adCounter = 0
         addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG){
