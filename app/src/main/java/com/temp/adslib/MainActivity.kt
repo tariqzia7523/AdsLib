@@ -13,6 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
         val mySharedPref = MySharedPref(this)
         mySharedPref.bannerID = "orignal_banner_id"
         mySharedPref.rewardID = "orignal_reward_id"

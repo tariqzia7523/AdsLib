@@ -15,6 +15,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
@@ -495,6 +496,23 @@ class AddInitilizer {
     companion object{
         var adCounter : Int = 2
         private var currentAdCounter : Int = 0
+        fun madiationInitilization(context: Context){
+            MobileAds.initialize(context,
+                OnInitializationCompleteListener { initializationStatus ->
+                    val statusMap = initializationStatus.adapterStatusMap
+                    for (adapterClass in statusMap.keys) {
+                        val status = statusMap[adapterClass]
+                        Log.d(
+                            "MyApp", String.format(
+                                "Adapter name: %s, Description: %s, Latency: %d",
+                                adapterClass, status!!.description, status.latency
+                            )
+                        )
+                    }
+
+                    // Start loading ads here...
+                })
+        }
     }
 
 }

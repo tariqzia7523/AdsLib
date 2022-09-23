@@ -29,7 +29,7 @@ first of all set orignal id and ad count on splash using following code,orignal 
 
 make a global variable 
   
-  addInitilizer = AddInitilizer(applicationContext,this, BuildConfig.DEBUG){
+    addInitilizer = AddInitilizer(applicationContext,this, BuildConfig.DEBUG){
              // on add close call back will run in this fun
 
 
@@ -123,6 +123,13 @@ addInitilizer.goAddFree()
         recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
  
        recylerView.adapter = admobNativeAdAdapter
+
+# To Display add with madiation (fb-admob)
+
+ Add following in Application class
+    
+    AddInitilizer.madiationInitilization(this)
+
  
 
 
