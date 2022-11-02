@@ -130,6 +130,23 @@ addInitilizer.goAddFree()
     
     AddInitilizer.madiationInitilization(this)
 
+# changes on splash screen
+
+some time call back from openapp dismised is called twice so use a variable to adjust this call
+and implement following interface on class level in splash
+
+    interface OnShowAdCompleteListener {
+        fun onShowAdComplete()
+    }
+
+and following line in oncreate
+
+    Application.globalOnShowAdCompleteListener = this
+
+for more assistance have a look in splash screen code 
+
+
+
  
 
 

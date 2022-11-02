@@ -51,7 +51,7 @@ class SplashActivity : AppCompatActivity(), Application.OnShowAdCompleteListener
             ifcalledOnce = true
             startActivity(Intent(this,MainActivity::class.java))
         }
-       
+
 
     }
 
