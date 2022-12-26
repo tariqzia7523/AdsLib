@@ -78,6 +78,7 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
     }
 
     override fun onCallBack(key: String?) {
+        AppOpenManager.onSplashCallBack =  null
         startActivity(Intent(this@SplashActivity,MainActivity::class.java))
     }
 
