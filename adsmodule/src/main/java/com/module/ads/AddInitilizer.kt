@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import com.android.billingclient.api.*
@@ -37,9 +38,9 @@ import com.google.android.play.core.tasks.Task
 class AddInitilizer {
 
     lateinit var context: Context
-    lateinit var activity: Activity
+
     var mInterstitialAd: InterstitialAd? = null
-    var progressDialog : ProgressDialog
+    var progressDialog : ProgressDialog? = null
     val TAG = "***Ads"
     var onAdsClosedCallBack : OnAdsClosedCallBack? = null
     var onRewardedAddCloseCallBack : OnRewardedAddCloseCallBack? = null
@@ -49,7 +50,8 @@ class AddInitilizer {
     var mySharedPref : MySharedPref
     var isDebagRunning = true
     var gloabalSelectedKey = ""
-
+    var activity: Activity? = null
+    var isInterAddLoading = false
     lateinit var mAppUpdateManager: AppUpdateManager
     private val RC_APP_UPDATE = 11
     var installStateUpdatedListener: InstallStateUpdatedListener =
@@ -73,7 +75,7 @@ class AddInitilizer {
                 && purchases != null
             ) {
                 MySharedPref(context).setPurcheshed(true)
-                activity.recreate();
+                activity!!.recreate();
             } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
                 // Handle an error caused by a user cancelling the purchase flow.
             } else {
@@ -82,19 +84,13 @@ class AddInitilizer {
         }
 
 
-    constructor(context: Context, activity: Activity,isDebugRunning : Boolean,onAdsClosedCallBack: OnAdsClosedCallBack?) {
+    constructor(context: Context, activity: Activity?,isDebugRunning : Boolean) {
         this.context = context
         this.activity = activity
         this.isDebagRunning = isDebugRunning
-        if(onAdsClosedCallBack != null){
-            this.onAdsClosedCallBack = onAdsClosedCallBack
-            loadIntersitialAdd()
-        }
-
-
-        progressDialog = ProgressDialog(activity)
-        progressDialog.setMessage(context.getString(R.string.loading_wait))
-        mySharedPref = MySharedPref(activity)
+        mySharedPref = MySharedPref(context)
+        loadIntersitialAdd()
+        Log.e("***Constr","consturcor called")
     }
 
 
@@ -168,7 +164,7 @@ class AddInitilizer {
         if(mySharedPref.rewaredVideocurrentCount >= mySharedPref.rewaredVideoCout){
             if(mRewardedAd != null && onRewardedAddCloseCallBack != null){
                 if (mRewardedAd != null) {
-                    mRewardedAd!!.show(activity) { rewardItem -> // Handle the reward.
+                    mRewardedAd!!.show(activity!!) { rewardItem -> // Handle the reward.
                         Log.d(TAG, "The user earned the reward.")
 
                     }
@@ -194,12 +190,12 @@ class AddInitilizer {
 
     fun checkUpdatesAndReviews(){
         try{
-            mAppUpdateManager = AppUpdateManagerFactory.create(activity)
+            mAppUpdateManager = AppUpdateManagerFactory.create(activity!!)
             mAppUpdateManager.registerListener(installStateUpdatedListener)
             mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE /*AppUpdateType.FLEXIBLE*/)) {
                     try {
-                        mAppUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE /*AppUpdateType.FLEXIBLE*/, activity, RC_APP_UPDATE)
+                        mAppUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE /*AppUpdateType.FLEXIBLE*/, activity!!, RC_APP_UPDATE)
                     } catch (e: IntentSender.SendIntentException) {
                         e.printStackTrace()
                     }
@@ -210,19 +206,19 @@ class AddInitilizer {
                     Log.e(TAG, "checkForAppUpdateAvailability: something else")
                 }
             }
-            if (MySharedPref(activity).userReview) {
-                val manager = ReviewManagerFactory.create(activity)
+            if (MySharedPref(activity!!).userReview) {
+                val manager = ReviewManagerFactory.create(activity!!)
                 val request = manager.requestReviewFlow()
                 request.addOnCompleteListener { task: Task<ReviewInfo?> ->
                     if (task.isSuccessful) {
                         // We can get the ReviewInfo object
                         val reviewInfo = task.result
-                        val flow = manager.launchReviewFlow(activity, reviewInfo)
+                        val flow = manager.launchReviewFlow(activity!!, reviewInfo)
                         flow.addOnCompleteListener { task2: Task<Void?>? ->
                             // The flow has finished. The API does not indicate whether the user
                             // reviewed or not, or even whether the review dialog was shown. Thus, no
                             // matter the result, we continue our app flow.
-                            MySharedPref(activity).isUserReviwed = true
+                            MySharedPref(activity!!).isUserReviwed = true
                         }
                     } else {
                         // There was some problem, log or handle the error code.
@@ -238,8 +234,8 @@ class AddInitilizer {
 
 
     fun loadBanner(bannerContainer: FrameLayout) {
-        if (!MySharedPref(activity).isPurshed) {
-            val adView = AdView(activity)
+        if (!MySharedPref(activity!!).isPurshed) {
+            val adView = AdView(activity!!)
             adView.adUnitId = AddIds.getBannerId(context,isDebagRunning)
             adView.adListener = object : AdListener() {
                 override fun onAdClosed() {
@@ -272,14 +268,14 @@ class AddInitilizer {
     }
     private fun getAdSize(): AdSize {
         // Step 2 - Determine the screen width (less decorations) to use for the ad width.
-        val display = activity.windowManager.defaultDisplay
+        val display = activity!!.windowManager.defaultDisplay
         val outMetrics = DisplayMetrics()
         display.getMetrics(outMetrics)
         val widthPixels = outMetrics.widthPixels.toFloat()
         val density = outMetrics.density
         val adWidth = (widthPixels / density).toInt()
         // Step 3 - Get adaptive ad size and return for setting on the ad view.
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity!!, adWidth)
     }
 
 
@@ -292,28 +288,36 @@ class AddInitilizer {
         }
         if(mInterstitialAd == null){
             Log.e(TAG,"mInterstitialAd  "+ "null")
+            if(!isInterAddLoading) loadIntersitialAdd()
             return false
         }else{
             Log.e(TAG,"mInterstitialAd  "+ "add call ")
-            progressDialog.show()
+            showProgressDialog()
             Handler(Looper.getMainLooper()).postDelayed({
-                progressDialog.dismiss()
+                progressDialog!!.dismiss()
                 currentAdCounter = 0;
-                mInterstitialAd!!.show(activity)
+                mInterstitialAd!!.show(activity!!)
             }, 900)
             return true
         }
     }
+    fun showProgressDialog(){
+        progressDialog = ProgressDialog(activity)
+        progressDialog!!.setMessage(activity!!.getString(R.string.loading_wait))
+        progressDialog!!.show()
+    }
 
      fun loadIntersitialAdd() {
-        if(!MySharedPref(activity).isPurshed){
-
+        if(!MySharedPref(activity!!).isPurshed){
+            isInterAddLoading = true
+            Log.e("***addLoading", "Add Loading started.")
             val adRequest = AdRequest.Builder().build()
-            InterstitialAd.load(activity, AddIds.getInterstitialId(context,isDebagRunning), adRequest,
+            InterstitialAd.load(activity!!, AddIds.getInterstitialId(context,isDebagRunning), adRequest,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(interstitialAd: InterstitialAd) {
                         // The mInterstitialAd reference will be null until
                         // an ad is loaded.
+                        isInterAddLoading = false
                         mInterstitialAd = interstitialAd
                         Log.e(TAG, "onAdLoaded")
                         mInterstitialAd!!.setFullScreenContentCallback(object :
@@ -321,7 +325,8 @@ class AddInitilizer {
                             override fun onAdDismissedFullScreenContent() {
                                 // Called when fullscreen content is dismissed.
                                 Log.e(TAG, "The ad was dismissed.")
-//                                startActivity(globelintent)
+//                                startactivity!!(globelintent)
+                                isInterAddLoading = false
                                 onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
                                 loadIntersitialAdd()
                             }
@@ -329,12 +334,14 @@ class AddInitilizer {
                             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                                 // Called when fullscreen content failed to show.
                                 Log.e(TAG, "The ad failed to show.")
+                                isInterAddLoading = false
                             }
 
                             override fun onAdShowedFullScreenContent() {
                                 // Called when fullscreen content is shown.
                                 // Make sure to set your reference to null so you don't
                                 // show it a second time.
+                                isInterAddLoading = false
                                 mInterstitialAd = null
                                 Log.e(TAG, "The ad was shown.")
                             }
@@ -344,6 +351,7 @@ class AddInitilizer {
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                         // Handle the error
                         Log.i(TAG, loadAdError.message)
+                        isInterAddLoading = false
                         mInterstitialAd = null
                     }
                 })
@@ -371,8 +379,8 @@ class AddInitilizer {
     }
 
      fun loadNativeAdd(templateView : TemplateView?,placeHolderView : View?,relativeLayout: RelativeLayout?) {
-        if(!MySharedPref(activity).isPurshed){
-            adLoader = AdLoader.Builder(activity, AddIds.getNativeId(context,isDebagRunning))
+        if(!MySharedPref(activity!!).isPurshed){
+            adLoader = AdLoader.Builder(activity!!, AddIds.getNativeId(context,isDebagRunning))
                 .withAdListener(object : AdListener() {
                     override fun onAdClosed() {
                         super.onAdClosed()
@@ -449,10 +457,9 @@ class AddInitilizer {
     }
 
     fun goAddFree() {
-        progressDialog.setMessage("Loading")
-        progressDialog.show()
+        showProgressDialog()
         Log.e(TAG, "add free metyhod called")
-        val billingClient = BillingClient.newBuilder(activity)
+        val billingClient = BillingClient.newBuilder(activity!!)
             .setListener(purchasesUpdatedListener)
             .enablePendingPurchases()
             .build()
@@ -467,7 +474,7 @@ class AddInitilizer {
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
                     billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
                         try {
-                            progressDialog.dismiss()
+                            progressDialog!!.dismiss()
                         } catch (c: java.lang.Exception) {
                             c.printStackTrace()
                         }
@@ -478,7 +485,7 @@ class AddInitilizer {
                             .setSkuDetails(skuDetailsList[0])
                             .build()
                         val responseCode = billingClient.launchBillingFlow(
-                            activity,
+                            activity!!,
                             billingFlowParams
                         ).responseCode
                         Log.e(TAG, "responseCode $responseCode")
@@ -513,6 +520,13 @@ class AddInitilizer {
 
                     // Start loading ads here...
                 })
+        }
+        var instance : AddInitilizer? = null
+        fun getInstance(context: Context,activity: Activity? ,isDebugRunning : Boolean) : AddInitilizer{
+            if(instance == null)
+                instance = AddInitilizer(context,activity,isDebugRunning)
+            instance!!.activity = activity
+            return instance!!
         }
     }
 

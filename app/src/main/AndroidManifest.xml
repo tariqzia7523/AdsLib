@@ -4,7 +4,7 @@
     package="com.temp.adslib">
 
     <application
-        android:name="com.module.ads.Application"
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

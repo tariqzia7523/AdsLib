@@ -31,7 +31,15 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     private Activity currentActivity;
     private long loadTime = 0;
     private MySharedPref sharedprefs;
+    public static OnSplashCallBack onSplashCallBack;
 
+    public static OnSplashCallBack getOnSplashCallBack() {
+        return onSplashCallBack;
+    }
+
+    public static void setOnSplashCallBack(OnSplashCallBack onSplashCallBack) {
+        AppOpenManager.onSplashCallBack = onSplashCallBack;
+    }
 
     public AppOpenManager(Application myApplication, MySharedPref sharedPref, Boolean isDebugRunning) {
         AD_UNIT_ID=AddIds.getAppOpenId(sharedPref,isDebugRunning);
@@ -67,22 +75,43 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                         @Override
                         public void onAdDismissedFullScreenContent() {
                             // Set the reference to null so isAdAvailable() returns false.
+                            Log.e("***Openapp","On Add Dismmed ");
                             AppOpenManager.this.appOpenAd = null;
                             isShowingAd = false;
+                            try{
+                                if(onSplashCallBack != null){
+                                    onSplashCallBack.afterOpenAddCallBack();
+                                    onSplashCallBack = null;
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             fetchAd();
+
                         }
 
                         @Override
                         public void onAdFailedToShowFullScreenContent(AdError adError) {
+                            Log.e("***Openapp","Add Failed to show content ");
+                            try{
+                                if(onSplashCallBack != null){
+                                    onSplashCallBack.afterOpenAddCallBack();
+                                    onSplashCallBack = null;
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override
                         public void onAdShowedFullScreenContent() {
+                            Log.e("***Openapp","Add shown ");
                             isShowingAd = true;
                         }
                     };
-
+            appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
             appOpenAd.show(currentActivity);
+
 
         } else {
             Log.d(LOG_TAG, "Can not show ad.");
@@ -102,13 +131,27 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                 AppOpenManager.this.appOpenAd = appOpenAd;
                 AppOpenManager.this.loadTime = (new Date()).getTime();
                 Log.e("***Ad","open add loaded");
+                try {
+                    if (onSplashCallBack != null) {
+                        showAdIfAvailable();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
                 Log.e("***Ad","open add failed "+ loadAdError.getMessage());
-
+                try{
+                    if(onSplashCallBack != null){
+                        onSplashCallBack.afterOpenAddCallBack();
+                        onSplashCallBack = null;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -147,6 +190,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     @Override
     public void onActivityResumed(Activity activity) {
         currentActivity = activity;
+        Log.e("***Openapp","Activity resumed ");
     }
 
     @Override
@@ -159,6 +203,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+        Log.e("***Openapp","onActivitySaveInstanceState ");
     }
 
     @Override
