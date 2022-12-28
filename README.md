@@ -29,7 +29,7 @@ Open app Ad is with different flow. For this make an application class in that a
         }
     }
 
-In SplashClass implement OnAdsClosedCallBack on class level and following line in oncreate
+In SplashClass implement OnSplashCallBack on class level and following line in oncreate
 
     AppOpenManager.onSplashCallBack = this
 
