@@ -15,6 +15,7 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        AppOpenManager.onSplashCallBack = this
         val mySharedPref = MySharedPref(this)
         mySharedPref.bannerID = "orignal_banner_id"
         mySharedPref.rewardID = "orignal_reward_id"
@@ -38,7 +39,6 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
 
     override fun onResume() {
         super.onResume()
-        AppOpenManager.onSplashCallBack = this
         addInitilizer = AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
         addInitilizer!!.onAdsClosedCallBack = this
 

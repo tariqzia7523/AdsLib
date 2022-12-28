@@ -84,7 +84,7 @@ class AddInitilizer {
         }
 
 
-    constructor(context: Context, activity: Activity?,isDebugRunning : Boolean) {
+    private constructor(context: Context, activity: Activity?,isDebugRunning : Boolean) {
         this.context = context
         this.activity = activity
         this.isDebagRunning = isDebugRunning

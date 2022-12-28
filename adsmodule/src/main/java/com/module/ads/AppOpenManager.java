@@ -32,6 +32,9 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     private long loadTime = 0;
     private MySharedPref sharedprefs;
     public static OnSplashCallBack onSplashCallBack;
+    public static boolean callAppOpenAddOnlyOnce = false;
+    public static int appOpenAddCounter = 0;
+
 
     public static OnSplashCallBack getOnSplashCallBack() {
         return onSplashCallBack;
@@ -40,6 +43,45 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     public static void setOnSplashCallBack(OnSplashCallBack onSplashCallBack) {
         AppOpenManager.onSplashCallBack = onSplashCallBack;
     }
+    FullScreenContentCallback fullScreenContentCallback =
+            new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    // Set the reference to null so isAdAvailable() returns false.
+                    Log.e("***Openapp","On Add Dismmed ");
+                    AppOpenManager.this.appOpenAd = null;
+                    isShowingAd = false;
+                    try{
+                        if(onSplashCallBack != null){
+                            onSplashCallBack.afterOpenAddCallBack();
+                            onSplashCallBack = null;
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    fetchAd();
+
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                    Log.e("***Openapp","Add Failed to show content ");
+                    try{
+                        if(onSplashCallBack != null){
+                            onSplashCallBack.afterOpenAddCallBack();
+                            onSplashCallBack = null;
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    Log.e("***Openapp","Add shown ");
+                    isShowingAd = true;
+                }
+            };
 
     public AppOpenManager(Application myApplication, MySharedPref sharedPref, Boolean isDebugRunning) {
         AD_UNIT_ID=AddIds.getAppOpenId(sharedPref,isDebugRunning);
@@ -70,45 +112,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
         if (!isShowingAd && isAdAvailable()) {
             Log.d(LOG_TAG, "Will show ad.");
 
-            FullScreenContentCallback fullScreenContentCallback =
-                    new FullScreenContentCallback() {
-                        @Override
-                        public void onAdDismissedFullScreenContent() {
-                            // Set the reference to null so isAdAvailable() returns false.
-                            Log.e("***Openapp","On Add Dismmed ");
-                            AppOpenManager.this.appOpenAd = null;
-                            isShowingAd = false;
-                            try{
-                                if(onSplashCallBack != null){
-                                    onSplashCallBack.afterOpenAddCallBack();
-                                    onSplashCallBack = null;
-                                }
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                            fetchAd();
 
-                        }
-
-                        @Override
-                        public void onAdFailedToShowFullScreenContent(AdError adError) {
-                            Log.e("***Openapp","Add Failed to show content ");
-                            try{
-                                if(onSplashCallBack != null){
-                                    onSplashCallBack.afterOpenAddCallBack();
-                                    onSplashCallBack = null;
-                                }
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onAdShowedFullScreenContent() {
-                            Log.e("***Openapp","Add shown ");
-                            isShowingAd = true;
-                        }
-                    };
             appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
             appOpenAd.show(currentActivity);
 
@@ -133,7 +137,8 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                 Log.e("***Ad","open add loaded");
                 try {
                     if (onSplashCallBack != null) {
-                        showAdIfAvailable();
+                        appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
+                        appOpenAd.show(currentActivity);
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -175,7 +180,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 
 
     public boolean isAdAvailable() {
-        return appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4);
+        return (appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4));
     }
 
     @Override
