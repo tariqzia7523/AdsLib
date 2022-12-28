@@ -2,12 +2,14 @@ package com.temp.adslib
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.module.ads.AddInitilizer
 import com.module.ads.MySharedPref
+import com.module.ads.OnAdsClosedCallBack
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
     lateinit var addInitilizer: AddInitilizer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,23 +17,21 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val mySharedPref = MySharedPref(this)
-        mySharedPref.bannerID = "orignal_banner_id"
-        mySharedPref.rewardID = "orignal_reward_id"
-        mySharedPref.nativeID = "orignal_native_id"
-        mySharedPref.interID = "orignal_interstitial_id"
-        AddInitilizer.adCounter = 0
+
+        addInitilizer = AddInitilizer.instance!!
+        addInitilizer.activity = this
+        addInitilizer.onAdsClosedCallBack = this
 
 
-        addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG){
-            // on add close call back will run in this fun
-
-
-            val tag = it // this is the tag passed while displaying ad calling
-            // now place checks and use it for further call
-
-
-        }
+//        addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG){
+//            // on add close call back will run in this fun
+//
+//
+//            val tag = it // this is the tag passed while displaying ad calling
+//            // now place checks and use it for further call
+//
+//
+//        }
 
         //by passing interface will start loading interstitial ad
         // or pass null if interstitial ad is not required for the activity
@@ -55,5 +55,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onCallBack(key: String?) {
+        Log.e("***InACt","Add closed "+key)
     }
 }

@@ -14,55 +14,71 @@ This project contains library for easy implementation of ad mob according to ad 
   
  implementation 'com.github.tariqzia7523:AdsLib:tag'
 
-# Usage 
-you can refer to MainActivity in sample project
-first of all set orignal id and ad count on splash using following code,orignal id will only be called on release version 
+# Usage
+
+
+## OpenApp Add
+Open app Ad is with different flow. For this make an application class in that add following code
+
+    class App : Application() {
+        override fun onCreate() {
+            super.onCreate()
+            val mySharedPref = MySharedPref(this)
+            mySharedPref.appOpenID ="orignal_app_id"
+            AppOpenManager(this, mySharedPref,BuildConfig.DEBUG)
+        }
+    }
+
+In SplashClass implement OnSplashCallBack on class level and following line in oncreate
+
+    AppOpenManager.onSplashCallBack = this
 
         val mySharedPref = MySharedPref(this)
         mySharedPref.bannerID = "orignal_banner_id"
         mySharedPref.rewardID = "orignal_reward_id"
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
-        mySharedPref.appOpenID = "orignal_app_opn_id"
         AddInitilizer.adCounter = 0
-        //ad count refers to show interstial ad after these number of clicks
 
-make a global variable 
-  
-    addInitilizer = AddInitilizer(applicationContext,this, BuildConfig.DEBUG){
-             // on add close call back will run in this fun
+And
+
+     AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
+
+you will get method afterOpenAddCallBack. In this must add line
+
+    AppOpenManager.onSplashCallBack = null
+
+add adjust furtherFlow 
 
 
-             val tag = it // this is the tag passed while displaying ad calling
-             // now place checks and use it for further call
+## Interstitial Ad
 
+implement interface on class level "OnAdsClosedCallBack" 
+it will give you a method "onCallBack" which will trigger when interstitial call is closed
 
-         }
-         
-     by passing interface will start loading interstitial ad
-     or pass null if interstitial ad is not required for the activity
-     // addInitilizer = AddInitilizer(applicationContext,this,null)
-     
-      //loading banner
-        addInitilizer.loadBanner(findViewById(R.id.banner_container))
+add following line in onResume Method
 
-        // pass three paramenters for loading asnd displaying native add templateView, placeholder text, and ad container
-        addInitilizer.loadNativeAdd(findViewById(R.id.nativeTemplateView),findViewById(R.id.temp_add_text),findViewById(R.id.add_container))
+    val addInitilizer = AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
 
-        // or if add loading is required,that will be displayed later then call
-        //addInitilizer.loadNativeAdd(null,null,null)
-        //for displaying native add call
-        //addInitilizer.setnativeAddOnView(findViewById(R.id.nativeTemplateView))
+### To show Interstitial Ad
 
-        findViewById<View>(R.id.show_intestial).setOnClickListener {
-            if(!addInitilizer.showInterstailAdd("Any tag")){
-                // TODO actual task
-            }
-        }
-        
-        use following code in layouts
-        
-          <RelativeLayout
+     if(!addInitilizer.showInterstailAdd("Any tag")){
+         // flow when add is not showing or not avalible
+     }
+
+#### onCallBack
+
+you will get same tag in this method which is passed while calling the add yu can use that tag to differ in all further call
+
+## Banner Ad
+
+    addInitilizer.loadBanner(findViewById(R.id.banner_container))
+
+## Native ad
+
+Add Following block in layout
+
+     <RelativeLayout
         android:id="@+id/add_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,6 +96,8 @@ make a global variable
             android:visibility="gone"
             app:gnt_template_type="@layout/gnt_small_template_view" />
 
+            <!--  app:gnt_template_type="@layout/gnt_medium_template_view"  -->
+
         <TextView
             android:id="@+id/temp_add_text"
             android:layout_width="wrap_content"
@@ -88,23 +106,10 @@ make a global variable
             android:text="@string/ad_will_display_hare" />
     </RelativeLayout>
 
-you can use 
-app:gnt_template_type="@layout/gnt_small_template_view" or app:gnt_template_type="@layout/gnt_medium_template_view"
+Add Following line in backend code
 
-you can also use TemplateView sepratly
+     addInitilizer.loadNativeAdd(findViewById(R.id.nativeTemplateView),findViewById(R.id.temp_add_text),findViewById(R.id.add_container))
 
-
- <com.module.ads.TemplateView
-   android:id="@+id/nativeTemplateView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:visibility="gone"
-    android:background="@drawable/gnt_outline_shape"
-    app:gnt_template_type="@layout/gnt_medium_template_view"/>
-            
-
-to add open app add following line of code in Application class oncreate method
-val appOpenManager = AppOpenManager(this, MySharedPref(this), BuildConfig.DEBUG)
 
 
 # InApp purcheses
@@ -130,20 +135,7 @@ addInitilizer.goAddFree()
     
     AddInitilizer.madiationInitilization(this)
 
-# changes on splash screen
 
-some time call back from openapp dismised is called twice so use a variable to adjust this call
-and implement following interface on class level in splash
-
-    interface OnShowAdCompleteListener {
-        fun onShowAdComplete()
-    }
-
-and following line in oncreate
-
-    Application.globalOnShowAdCompleteListener = this
-
-for more assistance have a look in splash screen code 
 
 
 
