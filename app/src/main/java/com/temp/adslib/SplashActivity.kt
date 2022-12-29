@@ -30,9 +30,8 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
 //        Application.globalOnShowAdCompleteListener = this //Important line
 
         findViewById<View>(R.id.move_text).setOnClickListener {
-            if(!addInitilizer!!.showInterstailAdd("test")){
-                startActivity(Intent(this@SplashActivity,MainActivity::class.java))
-            }
+            addInitilizer!!.showInterstailAdd("test")
+
         }
 
 

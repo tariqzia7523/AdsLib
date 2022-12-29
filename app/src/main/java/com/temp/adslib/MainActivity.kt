@@ -50,9 +50,7 @@ class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
         //addInitilizer.setnativeAddOnView(findViewById(R.id.nativeTemplateView))
 
         findViewById<View>(R.id.show_intestial).setOnClickListener {
-            if(!addInitilizer.showInterstailAdd("Any tag")){
-                // TODO actual task
-            }
+            addInitilizer.showInterstailAdd("Any tag")
         }
 
     }
