@@ -62,9 +62,7 @@ add following line in onResume Method
 
 ### To show Interstitial Ad
 
-     if(!addInitilizer.showInterstailAdd("Any tag")){
-         // flow when add is not showing or not avalible
-     }
+    addInitilizer.showInterstailAdd("Any tag")
 
 #### onCallBack
 
