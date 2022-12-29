@@ -336,6 +336,7 @@ class AddInitilizer {
      fun loadIntersitialAdd() {
         if(!MySharedPref(activity!!).isPurshed){
             isInterAddLoading = true
+            currentAdCounter = 0;
             Log.e("***addLoading", "Add Loading started.")
             val adRequest = AdRequest.Builder().build()
             InterstitialAd.load(activity!!, AddIds.getInterstitialId(context,isDebagRunning), adRequest,
