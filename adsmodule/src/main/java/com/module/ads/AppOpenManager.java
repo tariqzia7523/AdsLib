@@ -24,7 +24,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 
     private static final String LOG_TAG = "AppOpenManager";
     private String AD_UNIT_ID = "";
-    private AppOpenAd appOpenAd = null;
+    private static AppOpenAd appOpenAd = null;
     private AppOpenAd.AppOpenAdLoadCallback loadCallback;
     private static boolean isShowingAd = false;
     private final Application myApplication;
@@ -42,6 +42,9 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 
     public static void setOnSplashCallBack(OnSplashCallBack onSplashCallBack) {
         AppOpenManager.onSplashCallBack = onSplashCallBack;
+    }
+    public static boolean ifAddIsNull(){
+        return appOpenAd == null;
     }
     FullScreenContentCallback fullScreenContentCallback =
             new FullScreenContentCallback() {
