@@ -83,6 +83,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                 public void onAdShowedFullScreenContent() {
                     Log.e("***Openapp","Add shown ");
                     isShowingAd = true;
+                    appOpenAddCounter += 1;
                 }
             };
 
@@ -130,7 +131,15 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
         if (isAdAvailable()) {
             return;
         }
+        if(callAppOpenAddOnlyOnce && appOpenAddCounter < 1){
+            loadADd();
+        }else if(!callAppOpenAddOnlyOnce){
+            loadADd();
+        }
 
+
+    }
+    public void loadADd(){
         loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull AppOpenAd appOpenAd) {
