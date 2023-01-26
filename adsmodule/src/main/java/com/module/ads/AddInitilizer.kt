@@ -5,13 +5,13 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.IntentSender
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import com.android.billingclient.api.*
@@ -278,58 +278,57 @@ class AddInitilizer {
     }
 
 
-//    fun showInterstailAdd(key :String) : Boolean{
-//        gloabalSelectedKey = key
-//        if(currentAdCounter < adCounter){
-//            currentAdCounter += 1;
-//            Log.e(TAG,"currant ad counter "+ currentAdCounter)
-//            return false
-//        }
-//        if(mInterstitialAd == null){
-//            Log.e(TAG,"mInterstitialAd  "+ "null")
-//            if(!isInterAddLoading) loadIntersitialAdd()
-//            return false
-//        }else{
-//            Log.e(TAG,"mInterstitialAd  "+ "add call ")
-//            showProgressDialog()
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                progressDialog!!.dismiss()
-//                currentAdCounter = 0;
-//                mInterstitialAd!!.show(activity!!)
-//            }, 900)
-//            return true
-//        }
-//    }
-
-    fun showInterstailAdd(key :String){
+    fun showInterstailAdd(key :String) : Boolean{
         gloabalSelectedKey = key
         if(currentAdCounter < adCounter){
             currentAdCounter += 1;
             Log.e(TAG,"currant ad counter "+ currentAdCounter)
-            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
-            return
+            return false
         }
-        showProgressDialog()
-        loadIntersitialAdd()
-
-//        if(mInterstitialAd == null){
-//            Log.e(TAG,"mInterstitialAd  "+ "null")
-//            if(!isInterAddLoading) loadIntersitialAdd()
-//            return false
-//        }else{
-//            Log.e(TAG,"mInterstitialAd  "+ "add call ")
-//            showProgressDialog()
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                progressDialog!!.dismiss()
-//                currentAdCounter = 0;
-//                mInterstitialAd!!.show(activity!!)
-//            }, 900)
-//            return true
-//        }
+        if(mInterstitialAd == null){
+            Log.e(TAG,"mInterstitialAd  "+ "null")
+            return false
+        }else{
+            Log.e(TAG,"mInterstitialAd  "+ "add call ")
+            showProgressDialog()
+            Handler(Looper.getMainLooper()).postDelayed({
+                progressDialog!!.dismiss()
+                currentAdCounter = 0;
+                mInterstitialAd!!.show(activity!!)
+            }, 800)
+            return true
+        }
     }
+
+//    fun showInterstailAdd(key :String){
+//        gloabalSelectedKey = key
+//        if(currentAdCounter < adCounter){
+//            currentAdCounter += 1;
+//            Log.e(TAG,"currant ad counter "+ currentAdCounter)
+//            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+//            return
+//        }
+//        showProgressDialog()
+//        loadIntersitialAdd()
+//
+////        if(mInterstitialAd == null){
+////            Log.e(TAG,"mInterstitialAd  "+ "null")
+////            if(!isInterAddLoading) loadIntersitialAdd()
+////            return false
+////        }else{
+////            Log.e(TAG,"mInterstitialAd  "+ "add call ")
+////            showProgressDialog()
+////            Handler(Looper.getMainLooper()).postDelayed({
+////                progressDialog!!.dismiss()
+////                currentAdCounter = 0;
+////                mInterstitialAd!!.show(activity!!)
+////            }, 900)
+////            return true
+////        }
+//    }
     fun showProgressDialog(){
         progressDialog = ProgressDialog(activity)
-        progressDialog!!.setMessage(activity!!.getString(R.string.loading_wait))
+        progressDialog!!.setMessage(activity!!.getString(R.string.displaying_ad))
         progressDialog!!.show()
     }
 
@@ -360,7 +359,7 @@ class AddInitilizer {
                                     e.printStackTrace()
                                 }
                                 onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
-
+                                loadIntersitialAdd()
                             }
 
                             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -384,7 +383,7 @@ class AddInitilizer {
                                 Log.e(TAG, "The ad was shown.")
                             }
                         })
-                        mInterstitialAd!!.show(activity!!)
+//                        mInterstitialAd!!.show(activity!!)
                     }
 
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
@@ -551,6 +550,19 @@ class AddInitilizer {
                 Log.e(TAG, "service disconnected")
             }
         })
+    }
+
+    fun isNetAvailable(): Boolean{
+        var isNetAvlibel = false
+        val mgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = mgr.activeNetworkInfo
+
+        if (netInfo != null) {
+            isNetAvlibel = netInfo.isConnected
+        } else {
+            isNetAvlibel = false
+        }
+        return isNetAvlibel
     }
 
     companion object{

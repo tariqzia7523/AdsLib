@@ -24,7 +24,7 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
 
-        AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
+        AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG).loadIntersitialAdd()
 
 
 

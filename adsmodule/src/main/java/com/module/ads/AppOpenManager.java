@@ -2,7 +2,11 @@ package com.module.ads;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -99,6 +103,20 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 
     @OnLifecycleEvent(ON_START)
     public void onStart() {
+        try{
+            if(!isNetAvailable()){
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(onSplashCallBack != null)
+                            onSplashCallBack.afterOpenAddCallBack();
+                    }
+                },1000);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         if(!sharedprefs.isPurshed()) {
             showAdIfAvailable();
         }
@@ -226,5 +244,25 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     @Override
     public void onActivityDestroyed(Activity activity) {
         currentActivity = null;
+    }
+
+    public boolean isNetAvailable(){
+        boolean isNetAvlibel = false;
+        try{
+            ConnectivityManager mgr = (ConnectivityManager) currentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = mgr.getActiveNetworkInfo();
+            if (netInfo != null) {
+                if (netInfo.isConnected()) {
+                    isNetAvlibel = true;
+                }else {
+                    isNetAvlibel = false;
+                }
+            } else {
+                isNetAvlibel = false;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return isNetAvlibel;
     }
 }
