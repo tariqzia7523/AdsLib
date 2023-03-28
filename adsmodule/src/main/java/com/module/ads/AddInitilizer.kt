@@ -293,7 +293,7 @@ class AddInitilizer {
             showProgressDialog()
             Handler(Looper.getMainLooper()).postDelayed({
                 try{
-                    progressDialog!!.dismiss()
+                    hidePRogressDialog()
                     currentAdCounter = 0;
                     mInterstitialAd!!.show(activity!!)
                     mInterstitialAd!!.setFullScreenContentCallback(object :
@@ -303,11 +303,7 @@ class AddInitilizer {
                             Log.e(TAG, "The ad was dismissed.")
 //                                startactivity!!(globelintent)
                             isInterAddLoading = false
-                            try{
-                                progressDialog!!.dismiss()
-                            }catch (e : Exception){
-                                e.printStackTrace()
-                            }
+                            hidePRogressDialog()
                             onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
                             loadIntersitialAdd()
                         }
@@ -316,11 +312,7 @@ class AddInitilizer {
                             // Called when fullscreen content failed to show.
                             Log.e(TAG, "The ad failed to show.")
                             isInterAddLoading = false
-                            try{
-                                progressDialog!!.dismiss()
-                            }catch (e : Exception){
-                                e.printStackTrace()
-                            }
+                            hidePRogressDialog()
                             onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
                         }
 
@@ -370,9 +362,20 @@ class AddInitilizer {
 ////        }
 //    }
     fun showProgressDialog(){
-        progressDialog = ProgressDialog(activity)
-        progressDialog!!.setMessage(activity!!.getString(R.string.displaying_ad))
-        progressDialog!!.show()
+        try{
+            progressDialog = ProgressDialog(activity)
+            progressDialog!!.setMessage(activity!!.getString(R.string.displaying_ad))
+            progressDialog!!.show()
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+    }
+    fun hidePRogressDialog(){
+        try{
+            progressDialog!!.dismiss()
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 
      fun loadIntersitialAdd() {
@@ -398,20 +401,12 @@ class AddInitilizer {
                         Log.i(TAG, loadAdError.message)
                         isInterAddLoading = false
                         mInterstitialAd = null
-                        try{
-                            progressDialog!!.dismiss()
-                        }catch (e : Exception){
-                            e.printStackTrace()
-                        }
+                        hidePRogressDialog()
                         onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
                     }
                 })
         }else{
-            try{
-                progressDialog!!.dismiss()
-            }catch (e : Exception){
-                e.printStackTrace()
-            }
+            hidePRogressDialog()
             onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
         }
 
@@ -531,11 +526,7 @@ class AddInitilizer {
                     val params = SkuDetailsParams.newBuilder()
                     params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
                     billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
-                        try {
-                            progressDialog!!.dismiss()
-                        } catch (c: java.lang.Exception) {
-                            c.printStackTrace()
-                        }
+                        hidePRogressDialog()
                         Log.e(TAG, "sku details " + skuDetailsList!!.size)
                         // Process the result.
                         Log.e(TAG, "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
