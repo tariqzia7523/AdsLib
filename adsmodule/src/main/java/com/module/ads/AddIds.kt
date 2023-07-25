@@ -51,6 +51,7 @@ object AddIds {
         var id = ""
         id = if (isDebugRunning) {
             "ca-app-pub-3940256099942544/3419835294" // test id
+//            "ca-app-pub-3940256099942544/34153434294" // test id
         } else {
             mySharedPref.appOpenID // orignal id
         }
