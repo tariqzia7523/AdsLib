@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -44,8 +44,8 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.android.billingclient:billing:6.0.1'
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
-    implementation 'com.google.android.gms:play-services-ads:22.2.0'
-    implementation 'com.google.ads.mediation:facebook:6.14.0.0'
+    implementation 'com.google.android.gms:play-services-ads:22.3.0'
+    implementation 'com.google.ads.mediation:facebook:6.15.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     constraints {
         implementation('androidx.work:work-runtime:2.7.0') {
