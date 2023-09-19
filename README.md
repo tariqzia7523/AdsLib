@@ -74,6 +74,15 @@ add following line in onResume Method
 
     addInitilizer.showInterstailAdd("Any tag")
 
+[//]: # (for older verion)
+
+[//]: # ()
+[//]: # (    if&#40;!addInitilizer.showInterstailAdd&#40;"Any tag"&#41;&#41;{)
+
+[//]: # (        Log.e&#40;"***InACt","Add not calleed"&#41;)
+
+[//]: # (    })
+
 #### onCallBack
 
 you will get same tag in this method which is passed while calling the add yu can use that tag to differ in all further call
