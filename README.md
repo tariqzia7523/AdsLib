@@ -44,10 +44,15 @@ And
 
      AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
 
-And if you need to use interstial add which will be required in most of cases
 
-    AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG).loadIntersitialAdd()
- 
+[//]: # (For older versions )
+
+[//]: # (And if you need to use interstial add which will be required in most of cases)
+
+[//]: # ()
+[//]: # (    AddInitilizer.getInstance&#40;applicationContext,this,BuildConfig.DEBUG&#41;.loadIntersitialAdd&#40;&#41;)
+
+[//]: # ( )
 
 you will get method afterOpenAddCallBack. In this must add line
 
@@ -67,9 +72,7 @@ add following line in onResume Method
 
 ### To show Interstitial Ad
 
-    if(!addInitilizer.showInterstailAdd("Any tag")){
-        Log.e("***InACt","Add not calleed")
-    }
+    addInitilizer.showInterstailAdd("Any tag")
 
 #### onCallBack
 

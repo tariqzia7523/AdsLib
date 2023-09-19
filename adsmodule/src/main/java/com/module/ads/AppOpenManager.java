@@ -114,25 +114,26 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                 },1000);
 
             }
+            else showAdIfAvailable();
         }catch (Exception e){
             e.printStackTrace();
         }
-        if(!sharedprefs.isPurshed()) {
-            showAdIfAvailable();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    Log.e("***Openapp","called before new condition ");
-                    if(onSplashCallBack != null && !isShowingAd) {
-                        Log.e("***Openapp","new condition ");
-                        Log.e("***Openapp","called in condition ");
-                        onSplashCallBack.afterOpenAddCallBack();
-                    }
-                }
-            },6000);
-
-        }
+//        if(!sharedprefs.isPurshed()) {
+//            showAdIfAvailable();
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    Log.e("***Openapp","called before new condition ");
+//                    if(onSplashCallBack != null && !isShowingAd) {
+//                        Log.e("***Openapp","new condition ");
+//                        Log.e("***Openapp","called in condition ");
+//                        onSplashCallBack.afterOpenAddCallBack();
+//                    }
+//                }
+//            },6000);
+//
+//        }
 //        sharedprefs = new Sharedprefs(currentActivity);
 //        if (!sharedprefs.showPreferences()) {
 //            showAdIfAvailable();

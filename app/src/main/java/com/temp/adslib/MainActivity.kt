@@ -50,14 +50,14 @@ class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
         //addInitilizer.setnativeAddOnView(findViewById(R.id.nativeTemplateView))
 
         findViewById<View>(R.id.show_intestial).setOnClickListener {
-            if(!addInitilizer.showInterstailAdd("Any tag")){
-                Log.e("***InACt","Add not calleed")
-            }
+
+            addInitilizer.showInterstailAdd("Any tag")
         }
 
     }
 
     override fun onCallBack(key: String?) {
-        Log.e("***InACt","Add closed "+key)
+        if(key.equals("Any tag"))
+            Log.e("***InACt","Add closed "+key)
     }
 }

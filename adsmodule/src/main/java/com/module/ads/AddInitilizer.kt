@@ -278,89 +278,89 @@ class AddInitilizer {
     }
 
 
-    fun showInterstailAdd(key :String) : Boolean{
-        gloabalSelectedKey = key
-        if(currentAdCounter < adCounter){
-            currentAdCounter += 1;
-            Log.e(TAG,"currant ad counter "+ currentAdCounter)
-            return false
-        }
-        if(mInterstitialAd == null){
-            Log.e(TAG,"mInterstitialAd  "+ "null")
-            return false
-        }else{
-            Log.e(TAG,"mInterstitialAd  "+ "add call ")
-            showProgressDialog()
-            Handler(Looper.getMainLooper()).postDelayed({
-                try{
-                    hidePRogressDialog()
-                    currentAdCounter = 0;
-                    mInterstitialAd!!.show(activity!!)
-                    mInterstitialAd!!.setFullScreenContentCallback(object :
-                        FullScreenContentCallback() {
-                        override fun onAdDismissedFullScreenContent() {
-                            // Called when fullscreen content is dismissed.
-                            Log.e(TAG, "The ad was dismissed.")
-//                                startactivity!!(globelintent)
-                            isInterAddLoading = false
-                            hidePRogressDialog()
-                            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
-                            loadIntersitialAdd()
-                        }
-
-                        override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                            // Called when fullscreen content failed to show.
-                            Log.e(TAG, "The ad failed to show.")
-                            isInterAddLoading = false
-                            hidePRogressDialog()
-                            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
-                        }
-
-                        override fun onAdShowedFullScreenContent() {
-                            // Called when fullscreen content is shown.
-                            // Make sure to set your reference to null so you don't
-                            // show it a second time.
-                            isInterAddLoading = false
-                            mInterstitialAd = null
-                            Log.e(TAG, "The ad was shown.")
-                        }
-                    })
-                }catch (e : Exception){
-                    e.printStackTrace()
-                    onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
-                }
-
-            }, 800)
-            return true
-        }
-    }
-
-//    fun showInterstailAdd(key :String){
+//    fun showInterstailAdd(key :String) : Boolean{
 //        gloabalSelectedKey = key
 //        if(currentAdCounter < adCounter){
 //            currentAdCounter += 1;
 //            Log.e(TAG,"currant ad counter "+ currentAdCounter)
-//            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
-//            return
+//            return false
 //        }
-//        showProgressDialog()
-//        loadIntersitialAdd()
+//        if(mInterstitialAd == null){
+//            Log.e(TAG,"mInterstitialAd  "+ "null")
+//            return false
+//        }else{
+//            Log.e(TAG,"mInterstitialAd  "+ "add call ")
+//            showProgressDialog()
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                try{
+//                    hidePRogressDialog()
+//                    currentAdCounter = 0;
+//                    mInterstitialAd!!.show(activity!!)
+//                    mInterstitialAd!!.setFullScreenContentCallback(object :
+//                        FullScreenContentCallback() {
+//                        override fun onAdDismissedFullScreenContent() {
+//                            // Called when fullscreen content is dismissed.
+//                            Log.e(TAG, "The ad was dismissed.")
+////                                startactivity!!(globelintent)
+//                            isInterAddLoading = false
+//                            hidePRogressDialog()
+//                            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+//                            loadIntersitialAdd()
+//                        }
 //
-////        if(mInterstitialAd == null){
-////            Log.e(TAG,"mInterstitialAd  "+ "null")
-////            if(!isInterAddLoading) loadIntersitialAdd()
-////            return false
-////        }else{
-////            Log.e(TAG,"mInterstitialAd  "+ "add call ")
-////            showProgressDialog()
-////            Handler(Looper.getMainLooper()).postDelayed({
-////                progressDialog!!.dismiss()
-////                currentAdCounter = 0;
-////                mInterstitialAd!!.show(activity!!)
-////            }, 900)
-////            return true
-////        }
+//                        override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+//                            // Called when fullscreen content failed to show.
+//                            Log.e(TAG, "The ad failed to show.")
+//                            isInterAddLoading = false
+//                            hidePRogressDialog()
+//                            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+//                        }
+//
+//                        override fun onAdShowedFullScreenContent() {
+//                            // Called when fullscreen content is shown.
+//                            // Make sure to set your reference to null so you don't
+//                            // show it a second time.
+//                            isInterAddLoading = false
+//                            mInterstitialAd = null
+//                            Log.e(TAG, "The ad was shown.")
+//                        }
+//                    })
+//                }catch (e : Exception){
+//                    e.printStackTrace()
+//                    onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+//                }
+//
+//            }, 800)
+//            return true
+//        }
 //    }
+
+    fun showInterstailAdd(key :String){
+        gloabalSelectedKey = key
+        if(currentAdCounter < adCounter){
+            currentAdCounter += 1;
+            Log.e(TAG,"currant ad counter "+ currentAdCounter)
+            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+            return
+        }
+
+        loadIntersitialAdd()
+
+//        if(mInterstitialAd == null){
+//            Log.e(TAG,"mInterstitialAd  "+ "null")
+//            if(!isInterAddLoading) loadIntersitialAdd()
+//            return false
+//        }else{
+//            Log.e(TAG,"mInterstitialAd  "+ "add call ")
+//            showProgressDialog()
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                progressDialog!!.dismiss()
+//                currentAdCounter = 0;
+//                mInterstitialAd!!.show(activity!!)
+//            }, 900)
+//            return true
+//        }
+    }
     fun showProgressDialog(){
         try{
             progressDialog = ProgressDialog(activity)
@@ -379,7 +379,9 @@ class AddInitilizer {
     }
 
      fun loadIntersitialAdd() {
+
         if(!MySharedPref(activity!!).isPurshed){
+            showProgressDialog()
             isInterAddLoading = true
             currentAdCounter = 0;
             Log.e("***addLoading", "Add Loading started.")
@@ -392,6 +394,43 @@ class AddInitilizer {
                         isInterAddLoading = false
                         mInterstitialAd = interstitialAd
                         Log.e(TAG, "onAdLoaded")
+                        try{
+                            hidePRogressDialog()
+                            currentAdCounter = 0;
+                            mInterstitialAd!!.show(activity!!)
+                            mInterstitialAd!!.setFullScreenContentCallback(object :
+                                FullScreenContentCallback() {
+                                override fun onAdDismissedFullScreenContent() {
+                                    // Called when fullscreen content is dismissed.
+                                    Log.e(TAG, "The ad was dismissed.")
+//                                startactivity!!(globelintent)
+                                    isInterAddLoading = false
+                                    hidePRogressDialog()
+                                    onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+//                                    loadIntersitialAdd()
+                                }
+
+                                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                                    // Called when fullscreen content failed to show.
+                                    Log.e(TAG, "The ad failed to show.")
+                                    isInterAddLoading = false
+                                    hidePRogressDialog()
+                                    onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+                                }
+
+                                override fun onAdShowedFullScreenContent() {
+                                    // Called when fullscreen content is shown.
+                                    // Make sure to set your reference to null so you don't
+                                    // show it a second time.
+                                    isInterAddLoading = false
+                                    mInterstitialAd = null
+                                    Log.e(TAG, "The ad was shown.")
+                                }
+                            })
+                        }catch (e : Exception){
+                            e.printStackTrace()
+                            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+                        }
 
 //                        mInterstitialAd!!.show(activity!!)
                     }
@@ -406,7 +445,6 @@ class AddInitilizer {
                     }
                 })
         }else{
-            hidePRogressDialog()
             onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
         }
 
