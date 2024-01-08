@@ -1,6 +1,7 @@
 # AdsLib
 
-[![](https://jitpack.io/v/tariqzia7523/AdsLib.svg)](https://jitpack.io/#tariqzia7523/AdsLib)
+[![](https://jitpack.io/v/tariqzia7523/Adslib.svg)](https://jitpack.io/#tariqzia7523/Adslib)
+
 
  
 This project contains library for easy implementation of ad mob according to ad policies.
