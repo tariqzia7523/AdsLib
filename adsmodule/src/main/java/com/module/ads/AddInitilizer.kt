@@ -33,6 +33,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
+import java.util.Arrays
 
 
 class AddInitilizer {
@@ -627,6 +628,10 @@ class AddInitilizer {
                 instance = AddInitilizer(context,activity,isDebugRunning)
             instance!!.activity = activity
             return instance!!
+        }
+
+        fun addDevice(id: String){
+            RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(id))
         }
     }
 
