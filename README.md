@@ -17,6 +17,22 @@ This project contains library for easy implementation of ad mob according to ad 
 
 # Usage
 
+## GDPR Consent 
+
+On SplashScreen call following method, for more details look at SplashActivity in app
+ 
+    AddInitilizer(applicationContext,this,BuildConfig.DEBUG).getGDPRConsent("ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
+            override fun onConsentSuccess() {
+                Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
+               
+            }
+
+            override fun onConsentFailure(code: Int, message: String) {
+                Toast.makeText(this@SplashActivity, "failure", Toast.LENGTH_SHORT).show()
+                
+            }
+        })
+
 
 ## OpenApp Add
 Open app Ad is with different flow. For this make an application class in that add following code
@@ -26,7 +42,7 @@ Open app Ad is with different flow. For this make an application class in that a
             super.onCreate()
             val mySharedPref = MySharedPref(this)
             mySharedPref.appOpenID ="orignal_app_id"
-            AppOpenManager(this, mySharedPref,BuildConfig.DEBUG)
+            AppOpenManager(this, this,mySharedPref,BuildConfig.DEBUG)
         }
     }
 
@@ -41,9 +57,6 @@ In SplashClass implement OnSplashCallBack on class level and following line in o
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
 
-And
-
-     AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
 
 
 [//]: # (For older versions )
