@@ -30,7 +30,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     private String AD_UNIT_ID = "";
     private static AppOpenAd appOpenAd = null;
     private AppOpenAd.AppOpenAdLoadCallback loadCallback;
-    private static boolean isShowingAd = false;
+    public static boolean isShowingAd = false;
     private final Application myApplication;
     private Activity currentActivity;
     private long loadTime = 0;
