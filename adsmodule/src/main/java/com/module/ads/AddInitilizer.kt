@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.annotation.NonNull
 import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
@@ -33,12 +34,20 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.FormError
+import com.google.android.ump.UserMessagingPlatform
 import java.util.Arrays
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class AddInitilizer {
 
     lateinit var context: Context
+    private val isMobileAdsInitializeCalled : AtomicBoolean
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+
 
     var mInterstitialAd: InterstitialAd? = null
     var progressDialog : ProgressDialog? = null
@@ -85,12 +94,33 @@ class AddInitilizer {
         }
 
 
-    private constructor(context: Context, activity: Activity?,isDebugRunning : Boolean) {
+    constructor(context: Context, activity: Activity,isDebugRunning : Boolean) {
         this.context = context
         this.activity = activity
         this.isDebagRunning = isDebugRunning
         mySharedPref = MySharedPref(context)
+        isMobileAdsInitializeCalled = AtomicBoolean(false)
+        googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(context)
+
         Log.e("***Constr","consturcor called")
+    }
+
+    fun getGDPRConsent(appid: String,onConsentResponse: OnConsentResponse){
+        googleMobileAdsConsentManager.gatherConsent(activity!!,appid,isDebagRunning) { error ->
+            if (error != null) {
+                Log.e(TAG+"GDPR", "Consent not obtained in current session.")
+                Log.e(TAG+"GDPR", "GDPR Logs ${error.errorCode}: ${error.message}")
+                onConsentResponse.onConsentFailure(error.errorCode,error.message)
+            }else{
+                Log.e(TAG+"GDPR","Error == null")
+                onConsentResponse.onConsentSuccess()
+            }
+        }
+//        googleMobileAdsConsentManager.gatherConsent(activity!!,appid,isDebagRunning,object : GoogleMobileAdsConsentManager.OnConsentGatheringCompleteListener{
+//            override fun consentGatheringComplete(error: FormError?) {
+//                //TODO("Not yet implemented")
+//            }
+//        })
     }
 
 
@@ -107,13 +137,18 @@ class AddInitilizer {
             return
         }
 
+        if(!canRequestAd()){
+            onRewardedAddCloseCallBack.onLoadFailure()
+            return
+        }
+
 
         if(mySharedPref.rewaredVideocurrentCount >= mySharedPref.rewaredVideoCout){
             RewardedAd.load(context, AddIds.getRewardId(context,isDebagRunning),
                 adRequest, object : RewardedAdLoadCallback() {
                     override fun onAdFailedToLoad(@NonNull loadAdError: LoadAdError) {
                         // Handle the error.
-                        Log.d(TAG, loadAdError.message)
+                        Log.e(TAG, loadAdError.message)
                         mRewardedAd = null
                         onRewardedAddCloseCallBack.onLoadFailure()
                     }
@@ -121,16 +156,16 @@ class AddInitilizer {
                     override fun onAdLoaded(@NonNull rewardedAd: RewardedAd) {
                         mRewardedAd = rewardedAd
                         onRewardedAddCloseCallBack.onLoadSuccess()
-                        Log.d(TAG, "Ad was loaded.")
+                        Log.e(TAG, "Ad was loaded.")
                         mRewardedAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                             override fun onAdShowedFullScreenContent() {
                                 // Called when ad is shown.
-                                Log.d(TAG, "Ad was shown.")
+                                Log.e(TAG, "Ad was shown.")
                             }
 
                             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                                 // Called when ad fails to show.
-                                Log.d(TAG, "Ad failed to show.")
+                                Log.e(TAG, "Ad failed to show.")
                                 onRewardedAddCloseCallBack.onRewardFailure()
                             }
 
@@ -139,7 +174,7 @@ class AddInitilizer {
                                 // Set the ad reference to null so you don't show the ad a second time.
                                 onRewardedAddCloseCallBack.onRewardSuccess()
                                 mySharedPref.rewaredVideocurrentCount = 0
-                                Log.d(TAG, "Ad was dismissed.")
+                                Log.e(TAG, "Ad was dismissed.")
                                 mRewardedAd = null
                             }
                         }
@@ -165,11 +200,11 @@ class AddInitilizer {
             if(mRewardedAd != null && onRewardedAddCloseCallBack != null){
                 if (mRewardedAd != null) {
                     mRewardedAd!!.show(activity!!) { rewardItem -> // Handle the reward.
-                        Log.d(TAG, "The user earned the reward.")
+                        Log.e(TAG, "The user earned the reward.")
 
                     }
                 } else {
-                    Log.d(TAG, "The rewarded ad wasn't ready yet.")
+                    Log.e(TAG, "The rewarded ad wasn't ready yet.")
                     onRewardedAddCloseCallBack!!.onRewardFailure()
                 }
             }else{
@@ -234,6 +269,11 @@ class AddInitilizer {
 
 
     fun loadBanner(bannerContainer: FrameLayout) {
+        if(!canRequestAd()){
+            bannerContainer.visibility = View.GONE
+            return
+        }
+
         if (!MySharedPref(activity!!).isPurshed) {
             val adView = AdView(activity!!)
             adView.adUnitId = AddIds.getBannerId(context,isDebagRunning)
@@ -338,6 +378,10 @@ class AddInitilizer {
 
     fun showInterstailAdd(key :String){
         gloabalSelectedKey = key
+        if(!canRequestAd()){
+            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+            return
+        }
         if(currentAdCounter < adCounter){
             currentAdCounter += 1;
             Log.e(TAG,"currant ad counter "+ currentAdCounter)
@@ -379,7 +423,7 @@ class AddInitilizer {
         }
     }
 
-     fun loadIntersitialAdd() {
+     private fun loadIntersitialAdd() {
 
         if(!MySharedPref(activity!!).isPurshed){
             showProgressDialog()
@@ -471,7 +515,15 @@ class AddInitilizer {
     }
 
      fun loadNativeAdd(templateView : TemplateView?,placeHolderView : View?,relativeLayout: RelativeLayout?) {
-        if(!MySharedPref(activity!!).isPurshed){
+        if(!canRequestAd()){
+            try{
+                relativeLayout!!.visibility = View.GONE
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
+            return
+        }
+         if(!MySharedPref(activity!!).isPurshed){
             adLoader = AdLoader.Builder(activity!!, AddIds.getNativeId(context,isDebagRunning))
                 .withAdListener(object : AdListener() {
                     override fun onAdClosed() {
@@ -611,7 +663,7 @@ class AddInitilizer {
                     val statusMap = initializationStatus.adapterStatusMap
                     for (adapterClass in statusMap.keys) {
                         val status = statusMap[adapterClass]
-                        Log.d(
+                        Log.e(
                             "MyApp", String.format(
                                 "Adapter name: %s, Description: %s, Latency: %d",
                                 adapterClass, status!!.description, status.latency
@@ -622,16 +674,30 @@ class AddInitilizer {
                     // Start loading ads here...
                 })
         }
-        var instance : AddInitilizer? = null
-        fun getInstance(context: Context,activity: Activity? ,isDebugRunning : Boolean) : AddInitilizer{
-            if(instance == null)
-                instance = AddInitilizer(context,activity,isDebugRunning)
-            instance!!.activity = activity
-            return instance!!
-        }
+//        var instance : AddInitilizer? = null
+//        fun getInstance(context: Context,activity: Activity? ,isDebugRunning : Boolean) : AddInitilizer{
+//            if(instance == null)
+//                instance = AddInitilizer(context,activity,isDebugRunning)
+//            instance!!.activity = activity
+//            return instance!!
+//        }
 
         fun addDevice(id: String){
             RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(id))
+        }
+    }
+
+    fun canRequestAd() : Boolean{
+        val canRequestAd =  googleMobileAdsConsentManager.canRequestAds
+        Log.e(TAG,"can request ad $canRequestAd")
+        return canRequestAd
+    }
+
+    fun showGDPR(link : String){
+        googleMobileAdsConsentManager.showPrivacyOptionsForm(activity!!) { formError ->
+            if (formError != null) {
+                Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

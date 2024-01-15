@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.module.ads.AddInitilizer
+import com.module.ads.GoogleMobileAdsConsentManager
 import com.module.ads.MySharedPref
 import com.module.ads.OnAdsClosedCallBack
+import com.module.ads.OnRewardedAddCloseCallBack
 
 
-class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
+class MainActivity : AppCompatActivity() , OnAdsClosedCallBack,OnRewardedAddCloseCallBack{
     lateinit var addInitilizer: AddInitilizer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +20,10 @@ class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
 
 
 
-        addInitilizer = AddInitilizer.instance!!
+        addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG)
         addInitilizer.activity = this
         addInitilizer.onAdsClosedCallBack = this
+        addInitilizer.onRewardedAddCloseCallBack = this
 
 
 //        addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG){
@@ -51,7 +54,8 @@ class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
 
         findViewById<View>(R.id.show_intestial).setOnClickListener {
 
-            addInitilizer.showInterstailAdd("Any tag")
+//            addInitilizer.showInterstailAdd("Any tag")
+            addInitilizer.showRewardVideo()
         }
 
     }
@@ -59,5 +63,24 @@ class MainActivity : AppCompatActivity() , OnAdsClosedCallBack{
     override fun onCallBack(key: String?) {
         if(key.equals("Any tag"))
             Log.e("***InACt","Add closed "+key)
+    }
+
+    override fun onRewardSuccess() {
+        Log.e("***Reward","Reward success")
+
+
+    }
+
+    override fun onRewardFailure() {
+        Log.e("***Reward","Reward Failure")
+    }
+
+    override fun onLoadFailure() {
+        Log.e("***Reward","load Failure")
+    }
+
+    override fun onLoadSuccess() {
+        Log.e("***Reward","load Success")
+        addInitilizer.showRewardVideo()
     }
 }

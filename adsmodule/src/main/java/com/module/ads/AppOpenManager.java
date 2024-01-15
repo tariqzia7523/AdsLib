@@ -39,6 +39,8 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     public static boolean callAppOpenAddOnlyOnce = false;
     public static int appOpenAddCounter = 0;
 
+    Context context;
+
 
     public static OnSplashCallBack getOnSplashCallBack() {
         return onSplashCallBack;
@@ -91,8 +93,9 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                 }
             };
 
-    public AppOpenManager(Application myApplication, MySharedPref sharedPref, Boolean isDebugRunning) {
+    public AppOpenManager(Application myApplication, Context context,MySharedPref sharedPref, Boolean isDebugRunning) {
         AD_UNIT_ID=AddIds.getAppOpenId(sharedPref,isDebugRunning);
+        this.context = context;
         this.myApplication = myApplication;
         this.myApplication.registerActivityLifecycleCallbacks(this);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -137,7 +140,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 //        sharedprefs = new Sharedprefs(currentActivity);
 //        if (!sharedprefs.showPreferences()) {
 //            showAdIfAvailable();
-//            Log.d(LOG_TAG, "onStart");
+//            Log.e(LOG_TAG, "onStart");
 //        }
     }
 
@@ -145,8 +148,10 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     public void showAdIfAvailable() {
         // Only show ad if there is not already an app open ad currently showing
         // and an ad is available.
+
+
         if (!isShowingAd && isAdAvailable()) {
-            Log.d(LOG_TAG, "Will show ad.");
+            Log.e(LOG_TAG, "Will show ad.");
 
 
             appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
@@ -154,12 +159,15 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
 
 
         } else {
-            Log.d(LOG_TAG, "Can not show ad.");
+            Log.e(LOG_TAG, "Can not show ad.");
             fetchAd();
         }
     }
 
     public void fetchAd() {
+        if(!new GoogleMobileAdsConsentManager(context).getCanRequestAds()){
+            return;
+        }
         if (isAdAvailable()) {
             return;
         }

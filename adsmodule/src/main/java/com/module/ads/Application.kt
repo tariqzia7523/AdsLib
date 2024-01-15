@@ -64,12 +64,12 @@ class Application : Application() , Application.ActivityLifecycleCallbacks, Life
                             appOpenAd = ad
                             isLoadingAd = false
                             loadTime = Date().time
-                            Log.d(LOG_TAG, "onAdLoaded.")
+                            Log.e(LOG_TAG, "onAdLoaded.")
                         }
 
                         override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                             isLoadingAd = false
-                            Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.message)
+                            Log.e(LOG_TAG, "onAdFailedToLoad: " + loadAdError.message)
                         }
                     }
                 )
@@ -104,18 +104,18 @@ class Application : Application() , Application.ActivityLifecycleCallbacks, Life
 
         fun showAdIfAvailable(activity: Activity, onShowAdCompleteListener: OnShowAdCompleteListener) {
             if (isShowingAd) {
-                Log.d(LOG_TAG, "The app open ad is already showing.")
+                Log.e(LOG_TAG, "The app open ad is already showing.")
                 return
             }
 
             if (!isAdAvailable()) {
-                Log.d(LOG_TAG, "The app open ad is not ready yet.")
+                Log.e(LOG_TAG, "The app open ad is not ready yet.")
                 onShowAdCompleteListener.onShowAdComplete()
                 loadAd(activity)
                 return
             }
 
-            Log.d(LOG_TAG, "Will show ad.")
+            Log.e(LOG_TAG, "Will show ad.")
 
             appOpenAd!!.setFullScreenContentCallback(
                 object : FullScreenContentCallback() {

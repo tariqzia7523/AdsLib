@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import android.widget.Toast
 import com.module.ads.*
 
 class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBack{
@@ -23,6 +24,17 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
+        AddInitilizer(applicationContext,this,BuildConfig.DEBUG).getGDPRConsent("ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
+            override fun onConsentSuccess() {
+                Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
+                //TODO("Not yet implemented")
+            }
+
+            override fun onConsentFailure(code: Int, message: String) {
+                Toast.makeText(this@SplashActivity, "failure", Toast.LENGTH_SHORT).show()
+                //TODO("Not yet implemented")
+            }
+        })
 
 
 
@@ -40,8 +52,6 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
 
     override fun onResume() {
         super.onResume()
-        addInitilizer = AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
-        addInitilizer!!.onAdsClosedCallBack = this
 
 
     }

@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.android.billingclient:billing:6.1.0'
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
+    implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
     implementation 'com.google.ads.mediation:facebook:6.16.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     constraints {

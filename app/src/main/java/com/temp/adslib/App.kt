@@ -10,6 +10,6 @@ class App : Application() {
         super.onCreate()
         val mySharedPref = MySharedPref(this)
         mySharedPref.appOpenID ="orignal_app_id"
-        AppOpenManager(this, mySharedPref,BuildConfig.DEBUG)
+        AppOpenManager(this, this, mySharedPref,BuildConfig.DEBUG)
     }
 }
