@@ -82,7 +82,7 @@ it will give you a method "onCallBack" which will trigger when interstitial call
 
 add following line in onResume Method
 
-    val addInitilizer = AddInitilizer.getInstance(applicationContext,this,BuildConfig.DEBUG)
+    val addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG)
 
 ### To show Interstitial Ad
 
