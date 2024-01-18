@@ -64,7 +64,7 @@ In SplashClass implement OnSplashCallBack on class level and following line in o
 [//]: # (And if you need to use interstial add which will be required in most of cases)
 
 [//]: # ()
-[//]: # (    AddInitilizer.getInstance&#40;applicationContext,this,BuildConfig.DEBUG&#41;.loadIntersitialAdd&#40;&#41;)
+[//]: # (    AddInitilizer&#40;applicationContext,this,BuildConfig.DEBUG&#41;.loadIntersitialAdd&#40;&#41;)
 
 [//]: # ( )
 
