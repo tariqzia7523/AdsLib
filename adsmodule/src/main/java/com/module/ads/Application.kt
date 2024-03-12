@@ -23,6 +23,7 @@ class Application : Application() , Application.ActivityLifecycleCallbacks, Life
 
 
 
+
     fun getApplication(): Application? {
         return sApplication
     }
@@ -190,9 +191,6 @@ class Application : Application() , Application.ActivityLifecycleCallbacks, Life
         var AD_UNIT_ID = ""
 
         private const val LOG_TAG = "MyApplication"
-
-
-
     }
 
 

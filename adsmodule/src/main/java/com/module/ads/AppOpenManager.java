@@ -69,7 +69,6 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                         e.printStackTrace();
                     }
                     fetchAd();
-
                 }
 
                 @Override
@@ -79,6 +78,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                         if(onSplashCallBack != null){
                             onSplashCallBack.afterOpenAddCallBack();
                             onSplashCallBack = null;
+                            isShowingAd = false;
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -176,8 +176,6 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
         }else if(!callAppOpenAddOnlyOnce){
             loadADd();
         }
-
-
     }
     public void loadADd(){
         loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
