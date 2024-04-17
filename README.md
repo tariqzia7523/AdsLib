@@ -17,6 +17,12 @@ This project contains library for easy implementation of ad mob according to ad 
 
 # Usage
 
+## Add following to Manifest file in application tag 
+
+   <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
 ## GDPR Consent 
 
 On SplashScreen call following method, for more details look at SplashActivity in app
