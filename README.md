@@ -18,6 +18,7 @@ This project contains library for easy implementation of ad mob according to ad 
 # Usage
 
 ## Add following to Manifest file in application tag 
+use your application id
 
    <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
