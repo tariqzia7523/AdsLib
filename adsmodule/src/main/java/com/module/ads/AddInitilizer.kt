@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.IntentSender
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
@@ -33,11 +34,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.tasks.Task
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.ConsentRequestParameters
-import com.google.android.ump.FormError
-import com.google.android.ump.UserMessagingPlatform
+import com.google.android.gms.tasks.Task
 import java.util.Arrays
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -85,7 +82,9 @@ class AddInitilizer {
                 && purchases != null
             ) {
                 MySharedPref(context).setPurcheshed(true)
-                activity!!.recreate();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    activity!!.recreate()
+                };
             } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
                 // Handle an error caused by a user cancelling the purchase flow.
             } else {
@@ -248,7 +247,7 @@ class AddInitilizer {
                     if (task.isSuccessful) {
                         // We can get the ReviewInfo object
                         val reviewInfo = task.result
-                        val flow = manager.launchReviewFlow(activity!!, reviewInfo)
+                        val flow = manager.launchReviewFlow(activity!!, reviewInfo!!)
                         flow.addOnCompleteListener { task2: Task<Void?>? ->
                             // The flow has finished. The API does not indicate whether the user
                             // reviewed or not, or even whether the review dialog was shown. Thus, no
