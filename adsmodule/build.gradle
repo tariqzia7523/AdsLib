@@ -66,10 +66,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-
                 groupId = 'com.github.tariqzia7523'
                 artifactId = 'AdsLib'
-                version = '1.0.0'
+                version = '3.0.4'
             }
         }
     }
