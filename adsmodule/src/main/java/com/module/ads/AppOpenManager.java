@@ -1,5 +1,7 @@
 package com.module.ads;
 
+import static androidx.lifecycle.Lifecycle.Event.ON_START;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -21,8 +23,6 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 
 import java.util.Date;
-
-import static androidx.lifecycle.Lifecycle.Event.ON_START;
 
 public class AppOpenManager implements LifecycleObserver, Application.ActivityLifecycleCallbacks {
 

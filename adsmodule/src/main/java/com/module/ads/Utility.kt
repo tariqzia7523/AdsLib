@@ -1,17 +1,7 @@
 package com.module.ads
 
-import android.R
-import android.app.Activity
-import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
-import android.view.View
-import android.view.Window
-import android.widget.*
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.app.ActivityCompat.finishAffinity
 
 class Utility {
 

@@ -2,7 +2,6 @@ package com.module.ads
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.module.ads.R
 
 class MySharedPref(var context: Context) {
     var sharedPreferences: SharedPreferences

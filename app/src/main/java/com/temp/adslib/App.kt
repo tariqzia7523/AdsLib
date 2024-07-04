@@ -11,6 +11,6 @@ class App : Application() {
 
         val mySharedPref = MySharedPref(this)
         mySharedPref.appOpenID ="orignal_app_id"
-        AppOpenManager(this, this, mySharedPref,BuildConfig.DEBUG)
+        AppOpenManager(this, this, mySharedPref,true)
     }
 }

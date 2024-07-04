@@ -2,17 +2,12 @@ package com.module.ads
 
 import android.app.Activity
 import android.content.Context
-import android.provider.Settings
-import android.util.Log
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm.OnConsentFormDismissedListener
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.FormError
 import com.google.android.ump.UserMessagingPlatform
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.util.Locale
 
 
 class GoogleMobileAdsConsentManager constructor(context: Context) {

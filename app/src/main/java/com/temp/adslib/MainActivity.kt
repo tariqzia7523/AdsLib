@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() , OnAdsClosedCallBack,OnRewardedAddClos
 
 
 
-        addInitilizer = AddInitilizer(applicationContext,this,BuildConfig.DEBUG)
+        addInitilizer = AddInitilizer(applicationContext,this,true)
         addInitilizer.activity = this
         addInitilizer.onAdsClosedCallBack = this
         addInitilizer.onRewardedAddCloseCallBack = this
