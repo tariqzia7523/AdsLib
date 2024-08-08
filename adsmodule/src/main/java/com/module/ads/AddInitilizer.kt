@@ -279,7 +279,7 @@ class AddInitilizer {
     }
 
 
-    fun loadBanner(bannerContainer: FrameLayout) {
+    fun loadBanner(bannerContainer: FrameLayout, tempView : View? = null) {
         if(!canRequestAd()){
             bannerContainer.visibility = View.GONE
             return
@@ -301,6 +301,12 @@ class AddInitilizer {
                 }
                 override fun onAdLoaded() {
                     super.onAdLoaded()
+                    try{
+                        if(tempView != null)
+                            tempView.visibility = View.GONE
+                    }catch (e : Exception){
+                        e.printStackTrace()
+                    }
                 }
                 override fun onAdClicked() {
                     super.onAdClicked()
