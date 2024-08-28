@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.1"
+agp = "8.5.2"
 appUpdate = "2.1.0"
 billing = "7.0.0"
 facebook = "6.17.0.0"
@@ -13,9 +13,9 @@ material = "1.12.0"
 activity = "1.9.1"
 constraintlayout = "2.1.4"
 multidex = "1.0.3"
-playServicesAds = "23.2.0"
+playServicesAds = "23.3.0"
 review = "2.0.1"
-sdpAndroid = "1.1.0"
+sdpAndroid = "1.1.1"
 userMessagingPlatform = "3.0.0"
 lifecycleProcess = "2.8.4"
 
