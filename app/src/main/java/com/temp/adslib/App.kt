@@ -8,9 +8,11 @@ import com.module.ads.MySharedPref
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+//
+//        val mySharedPref = MySharedPref(this)
+//        mySharedPref.appOpenID ="orignal_app_id"
+//        AppOpenManager(this, this, mySharedPref,true)
+        AddInitilizer.initAd(applicationContext)
 
-        val mySharedPref = MySharedPref(this)
-        mySharedPref.appOpenID ="orignal_app_id"
-        AppOpenManager(this, this, mySharedPref,true)
     }
 }

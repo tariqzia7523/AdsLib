@@ -1,6 +1,7 @@
 package com.module.ads
 
 import android.app.Activity
+import android.app.Application
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.IntentSender
@@ -124,6 +125,7 @@ class AddInitilizer {
                 onConsentResponse.onConsentFailure(error.errorCode,error.message)
             }else{
                 Log.e(TAG+"GDPR","Error == null")
+                MySharedPref(activity!!).isContestGiven = true
                 onConsentResponse.onConsentSuccess()
             }
         }
@@ -690,6 +692,15 @@ class AddInitilizer {
 
                     // Start loading ads here...
                 })
+        }
+
+        fun initAd(context: Context){
+            MobileAds.initialize(context) {}
+        }
+
+        fun startAppOpenAd(application: android.app.Application,activity: Activity,mySharedPref: MySharedPref,isDebugRunning: Boolean){
+            if(mySharedPref.isContestGiven)
+                AppOpenManager(application, activity,mySharedPref,BuildConfig.DEBUG)
         }
 //        var instance : AddInitilizer? = null
 //        fun getInstance(context: Context,activity: Activity? ,isDebugRunning : Boolean) : AddInitilizer{

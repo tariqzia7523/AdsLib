@@ -23,12 +23,28 @@ use your application id
 <meta-data
       android:name="com.google.android.gms.ads.APPLICATION_ID"
       android:value="ca-app-pub-3940256099942544~3347511713" />
-            
 
-## GDPR Consent 
+## In Application class
+Add following line
+
+    AddInitilizer.initAd(applicationContext)
+
+
+In SplashClass implement OnSplashCallBack on class level and following line in oncreate
+
+        AppOpenManager.onSplashCallBack = this
+        val mySharedPref = MySharedPref(this)
+        mySharedPref.bannerID = "orignal_banner_id"
+        mySharedPref.rewardID = "orignal_reward_id"
+        mySharedPref.nativeID = "orignal_native_id"
+        mySharedPref.interID = "orignal_interstitial_id"
+        AddInitilizer.adCounter = 0
+        AddInitilizer.startAppOpenAd(application,this,mySharedPref,true)// if you dont want to use appopen add remove this line
+
+## GDPR Consent
 
 On SplashScreen call following method, for more details look at SplashActivity in app
- 
+
     AddInitilizer(applicationContext,this,BuildConfig.DEBUG).getGDPRConsent("ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
             override fun onConsentSuccess() {
                 Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
@@ -40,32 +56,6 @@ On SplashScreen call following method, for more details look at SplashActivity i
                 
             }
         })
-
-
-## OpenApp Add
-Open app Ad is with different flow. For this make an application class in that add following code
-
-    class App : Application() {
-        override fun onCreate() {
-            super.onCreate()
-            val mySharedPref = MySharedPref(this)
-            mySharedPref.appOpenID ="orignal_app_id"
-            AppOpenManager(this, this,mySharedPref,BuildConfig.DEBUG)
-        }
-    }
-
-In SplashClass implement OnSplashCallBack on class level and following line in oncreate
-
-    AppOpenManager.onSplashCallBack = this
-
-        val mySharedPref = MySharedPref(this)
-        mySharedPref.bannerID = "orignal_banner_id"
-        mySharedPref.rewardID = "orignal_reward_id"
-        mySharedPref.nativeID = "orignal_native_id"
-        mySharedPref.interID = "orignal_interstitial_id"
-        AddInitilizer.adCounter = 0
-
-
 
 [//]: # (For older versions )
 

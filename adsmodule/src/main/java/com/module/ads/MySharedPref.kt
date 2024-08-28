@@ -46,6 +46,13 @@ class MySharedPref(var context: Context) {
         }
 
 
+    var isContestGiven: Boolean
+        get() = sharedPreferences.getBoolean(context.getString(R.string.is_consect_given), false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(context.getString(R.string.is_consect_given), value).apply()
+        }
+
     val isPurshed: Boolean
         get() = sharedPreferences.getBoolean(context.getString(R.string.is_purchsed), false)
     var isUserReviwed: Boolean

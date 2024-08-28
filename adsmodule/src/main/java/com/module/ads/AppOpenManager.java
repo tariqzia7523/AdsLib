@@ -52,6 +52,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     public static boolean ifAddIsNull(){
         return appOpenAd == null;
     }
+
     FullScreenContentCallback fullScreenContentCallback =
             new FullScreenContentCallback() {
                 @Override

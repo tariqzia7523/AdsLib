@@ -16,4 +16,5 @@
     <string name="reward_id">REWARD_ID</string>
     <string name="app_open_id">APP_OPEN_ID</string>
     <string name="displaying_ad">Displaying Ad!</string>
+    <string name="is_consect_given">IS_CONSECT_GIVEN</string>
 </resources>
