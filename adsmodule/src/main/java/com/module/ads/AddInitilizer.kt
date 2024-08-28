@@ -72,6 +72,8 @@ class AddInitilizer {
     var gloabalSelectedKey = ""
     var activity: Activity? = null
     var isInterAddLoading = false
+
+
     lateinit var mAppUpdateManager: AppUpdateManager
     private val RC_APP_UPDATE = 11
     var installStateUpdatedListener: InstallStateUpdatedListener =
@@ -117,7 +119,7 @@ class AddInitilizer {
         Log.e("***Constr","consturcor called")
     }
 
-    fun getGDPRConsent(appid: String,onConsentResponse: OnConsentResponse){
+    fun getGDPRConsent(application: Application,appid: String,onConsentResponse: OnConsentResponse){
         googleMobileAdsConsentManager.gatherConsent(activity!!,appid,isDebagRunning) { error ->
             if (error != null) {
                 Log.e(TAG+"GDPR", "Consent not obtained in current session.")
@@ -125,7 +127,10 @@ class AddInitilizer {
                 onConsentResponse.onConsentFailure(error.errorCode,error.message)
             }else{
                 Log.e(TAG+"GDPR","Error == null")
-                MySharedPref(activity!!).isContestGiven = true
+                if(!mySharedPref.isContestGiven) {
+                    AppOpenManager(application, activity,mySharedPref,BuildConfig.DEBUG)
+                    mySharedPref.isContestGiven = true
+                }
                 onConsentResponse.onConsentSuccess()
             }
         }
