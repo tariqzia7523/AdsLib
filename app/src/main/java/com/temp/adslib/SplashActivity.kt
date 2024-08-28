@@ -23,8 +23,8 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
-        AddInitilizer.startAppOpenAd(application,this,mySharedPref,true)
-        AddInitilizer(applicationContext,this,true).getGDPRConsent(application,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
+        AddInitilizer.startAppOpenAd(application,applicationContext,mySharedPref,true)
+        AddInitilizer(applicationContext,this,true).getGDPRConsent(application,applicationContext,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
             override fun onConsentSuccess() {
                 Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
                 //TODO("Not yet implemented")

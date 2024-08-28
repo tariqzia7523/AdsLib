@@ -119,7 +119,7 @@ class AddInitilizer {
         Log.e("***Constr","consturcor called")
     }
 
-    fun getGDPRConsent(application: Application,appid: String,onConsentResponse: OnConsentResponse){
+    fun getGDPRConsent(application: Application,applicationContext: Context,appid: String,onConsentResponse: OnConsentResponse){
         googleMobileAdsConsentManager.gatherConsent(activity!!,appid,isDebagRunning) { error ->
             if (error != null) {
                 Log.e(TAG+"GDPR", "Consent not obtained in current session.")
@@ -128,7 +128,7 @@ class AddInitilizer {
             }else{
                 Log.e(TAG+"GDPR","Error == null")
                 if(!mySharedPref.isContestGiven) {
-                    AppOpenManager(application, activity,mySharedPref,BuildConfig.DEBUG)
+                    AppOpenManager(application, applicationContext,mySharedPref,BuildConfig.DEBUG)
                     mySharedPref.isContestGiven = true
                 }
                 onConsentResponse.onConsentSuccess()
@@ -703,9 +703,9 @@ class AddInitilizer {
             MobileAds.initialize(context) {}
         }
 
-        fun startAppOpenAd(application: android.app.Application,activity: Activity,mySharedPref: MySharedPref,isDebugRunning: Boolean){
+        fun startAppOpenAd(application: android.app.Application,applicationContext : Context,mySharedPref: MySharedPref,isDebugRunning: Boolean){
             if(mySharedPref.isContestGiven)
-                AppOpenManager(application, activity,mySharedPref,BuildConfig.DEBUG)
+                AppOpenManager(application, applicationContext,mySharedPref,BuildConfig.DEBUG)
         }
 //        var instance : AddInitilizer? = null
 //        fun getInstance(context: Context,activity: Activity? ,isDebugRunning : Boolean) : AddInitilizer{

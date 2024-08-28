@@ -29,8 +29,8 @@ Add following line
 
     AddInitilizer.initAd(applicationContext)
 
-
-In SplashClass implement OnSplashCallBack on class level and following line in oncreate
+## In SplashClass
+implement OnSplashCallBack on class level and following line in oncreate
 
         AppOpenManager.onSplashCallBack = this
         val mySharedPref = MySharedPref(this)
@@ -39,13 +39,13 @@ In SplashClass implement OnSplashCallBack on class level and following line in o
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
-        AddInitilizer.startAppOpenAd(application,this,mySharedPref,true)// if you dont want to use appopen add remove this line
+        AddInitilizer.startAppOpenAd(application,applicationContext,mySharedPref,true)// if you dont want to use appopen add remove this line
 
 ## GDPR Consent
 
 On SplashScreen call following method, for more details look at SplashActivity in app
 
-    AddInitilizer(applicationContext,this,BuildConfig.DEBUG).getGDPRConsent("ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
+    AddInitilizer(applicationContext,this,BuildConfig.DEBUG).getGDPRConsent(application,applicationContext,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
             override fun onConsentSuccess() {
                 Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
                
