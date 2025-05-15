@@ -10,9 +10,11 @@
         <meta-data
             android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
             android:value="true"/>
-        <property
-            android:name="android.adservices.AD_SERVICES_CONFIG"
-            android:resource="@xml/gma_ad_services_config"
-            tools:replace="android:resource" />
+<!--        <property-->
+<!--            android:name="android.adservices.AD_SERVICES_CONFIG"-->
+<!--            android:resource="@xml/gma_ad_services_config"-->
+<!--            tools:replace="android:resource" />-->
     </application>
 </manifest>
+
+<!--    android:resource="@xml/gma_ad_services_config"-->

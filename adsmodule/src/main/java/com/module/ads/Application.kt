@@ -58,7 +58,7 @@ class Application : Application() , Application.ActivityLifecycleCallbacks, Life
                     context,
                     AD_UNIT_ID,
                     request,
-                    AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
+//                    AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
                     object : AppOpenAd.AppOpenAdLoadCallback() {
 
                         override fun onAdLoaded(ad: AppOpenAd) {
