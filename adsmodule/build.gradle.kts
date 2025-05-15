@@ -37,7 +37,6 @@ android {
         buildConfig = true
     }
 
-
 }
 
 dependencies {
