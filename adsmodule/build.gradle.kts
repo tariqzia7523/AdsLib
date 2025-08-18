@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
     implementation(libs.facebook)
+    implementation(libs.applovin)
     implementation(libs.multidex)
     constraints {
         implementation("androidx.work:work-runtime:2.7.0")

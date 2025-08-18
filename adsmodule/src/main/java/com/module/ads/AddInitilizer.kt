@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 class AddInitilizer {
-    // new version
+    // new version 18 Aug 2025
     lateinit var context: Context
     private val isMobileAdsInitializeCalled : AtomicBoolean
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager

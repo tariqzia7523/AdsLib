@@ -1,5 +1,6 @@
 [versions]
-agp = "8.7.3"
+agp = "8.10.1"
+applovin = "13.3.1.1"
 appUpdate = "2.1.0"
 billing = "7.1.1"
 facebook = "6.20.0.0"
@@ -22,6 +23,7 @@ lifecycleProcess = "2.9.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
+applovin = { module = "com.google.ads.mediation:applovin", version.ref = "applovin" }
 billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 facebook = { module = "com.google.ads.mediation:facebook", version.ref = "facebook" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
