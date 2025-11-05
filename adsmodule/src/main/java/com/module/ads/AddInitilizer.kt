@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 class AddInitilizer {
-    // new version 18 Aug 2025
+    // new version 05 Nov 2025
     lateinit var context: Context
     private val isMobileAdsInitializeCalled : AtomicBoolean
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
@@ -624,46 +624,46 @@ class AddInitilizer {
 
     }
 
-    fun goAddFree() {
-        showProgressDialog()
-        Log.e(TAG, "add free metyhod called")
-        val billingClient = BillingClient.newBuilder(activity!!)
-            .setListener(purchasesUpdatedListener)
-            .enablePendingPurchases()
-            .build()
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is ready. You can query purchases here.
-                    Log.e(TAG, "ready to purchess")
-                    val skuList: MutableList<String> = ArrayList()
-                    skuList.add("premium_upgrade")
-                    val params = SkuDetailsParams.newBuilder()
-                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                    billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
-                        hidePRogressDialog()
-                        Log.e(TAG, "sku details " + skuDetailsList!!.size)
-                        // Process the result.
-                        Log.e(TAG, "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
-                        val billingFlowParams = BillingFlowParams.newBuilder()
-                            .setSkuDetails(skuDetailsList[0])
-                            .build()
-                        val responseCode = billingClient.launchBillingFlow(
-                            activity!!,
-                            billingFlowParams
-                        ).responseCode
-                        Log.e(TAG, "responseCode $responseCode")
-                    }
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                Log.e(TAG, "service disconnected")
-            }
-        })
-    }
+//    fun goAddFree() {
+//        showProgressDialog()
+//        Log.e(TAG, "add free metyhod called")
+//        val billingClient = BillingClient.newBuilder(activity!!)
+//            .setListener(purchasesUpdatedListener)
+//            .enablePendingPurchases()
+//            .build()
+//        billingClient.startConnection(object : BillingClientStateListener {
+//            override fun onBillingSetupFinished(billingResult: BillingResult) {
+//                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+//                    // The BillingClient is ready. You can query purchases here.
+//                    Log.e(TAG, "ready to purchess")
+//                    val skuList: MutableList<String> = ArrayList()
+//                    skuList.add("premium_upgrade")
+//                    val params = SkuDetailsParams.newBuilder()
+//                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+//                    billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
+//                        hidePRogressDialog()
+//                        Log.e(TAG, "sku details " + skuDetailsList!!.size)
+//                        // Process the result.
+//                        Log.e(TAG, "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
+//                        val billingFlowParams = BillingFlowParams.newBuilder()
+//                            .setSkuDetails(skuDetailsList[0])
+//                            .build()
+//                        val responseCode = billingClient.launchBillingFlow(
+//                            activity!!,
+//                            billingFlowParams
+//                        ).responseCode
+//                        Log.e(TAG, "responseCode $responseCode")
+//                    }
+//                }
+//            }
+//
+//            override fun onBillingServiceDisconnected() {
+//                // Try to restart the connection on the next request to
+//                // Google Play by calling the startConnection() method.
+//                Log.e(TAG, "service disconnected")
+//            }
+//        })
+//    }
 
     fun isNetAvailable(): Boolean{
         var isNetAvlibel = false
