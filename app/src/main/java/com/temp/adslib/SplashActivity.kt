@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Toast
 import com.module.ads.*
 
-class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBack{
+class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack {
     private var secondsRemaining: Long = 0L
     var ifcalledOnce = false
     var addInitilizer : AddInitilizer? = null
@@ -94,9 +94,5 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
         startActivity(Intent(this@SplashActivity,MainActivity::class.java))
     }
 
-    override fun afterOpenAddCallBack() {
-//        AppOpenManagerOld.onSplashCallBack =  null
-        startActivity(Intent(this@SplashActivity,MainActivity::class.java))
-    }
 
 }

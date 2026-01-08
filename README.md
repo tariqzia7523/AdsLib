@@ -25,37 +25,70 @@ use your application id
       android:value="ca-app-pub-3940256099942544~3347511713" />
 
 ## In Application class
-Add following line
+use following in application class
 
-    AddInitilizer.initAd(applicationContext)
+    class App : Application() {
+    lateinit var appOpenAdManager: AppOpenAdManager
+    lateinit var consentManager: GoogleMobileAdsConsentManager
+    private var isLoadingCalled : Boolean= false
+    override fun onCreate() {
+        super.onCreate()
+        val mySharedPref = MySharedPref(this)
+        mySharedPref.appOpenID ="orignal_app_id"
+
+        AddInitilizer.initAd(applicationContext)
+        consentManager = GoogleMobileAdsConsentManager.getInstance(this)
+
+
+        // ***** this is optional you can use it if you want to log revenue details in firebase
+        // Classes are available within the code.
+        // For Firebase analytics use following line
+        //AdRevenueDispatcher.listener = FirebaseAdRevenueLogger(FirebaseAnalytics.getInstance(this))
+
+        // just for logging screen or testing
+        AdRevenueDispatcher.listener = FirebaseAdRevenueLogger()
+
+    }
+
+    fun initAppOpenAfterConsent(adUnitId: String) {
+        if(!isLoadingCalled){
+            Log.e("***AppOpen","app open called ")
+            appOpenAdManager = AppOpenAdManager(
+                this,
+                adUnitId,
+                consentManager
+            )
+            isLoadingCalled = true
+        }
+    }
+}
 
 ## In SplashClass
 implement OnSplashCallBack on class level and following line in oncreate
 
-        AppOpenManager.onSplashCallBack = this
-        val mySharedPref = MySharedPref(this)
+
+         val mySharedPref = MySharedPref(this)
         mySharedPref.bannerID = "orignal_banner_id"
         mySharedPref.rewardID = "orignal_reward_id"
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
-        AddInitilizer.startAppOpenAd(application,applicationContext,mySharedPref,true)// if you dont want to use appopen add remove this line
-
-## GDPR Consent
-
-On SplashScreen call following method, for more details look at SplashActivity in app
-
-    AddInitilizer(applicationContext,this,BuildConfig.DEBUG).getGDPRConsent(application,applicationContext,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
+        AddInitilizer.startAppOpenAd(application,applicationContext,mySharedPref,true)
+        AddInitilizer(applicationContext,this,true).getGDPRConsent(application,applicationContext,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
             override fun onConsentSuccess() {
-                Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
-               
+                // ************* Important Line *************
+                (application as App).initAppOpenAfterConsent(
+                    AddIds.getAppOpenId(mySharedPref, BuildConfig.DEBUG))
+                    Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
             }
 
             override fun onConsentFailure(code: Int, message: String) {
                 Toast.makeText(this@SplashActivity, "failure", Toast.LENGTH_SHORT).show()
-                
+
             }
         })
+
+
 
 [//]: # (For older versions )
 
