@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.2"
 applovin = "13.5.0.0"
 appUpdate = "2.1.0"
 billing = "8.0.0"

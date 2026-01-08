@@ -16,11 +16,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.annotation.NonNull
 import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetailsParams
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -48,6 +44,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.module.ads.AdRevenueDispatcher.listener
 import java.util.Arrays
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -127,10 +124,16 @@ class AddInitilizer {
                 onConsentResponse.onConsentFailure(error.errorCode,error.message)
             }else{
                 Log.e(TAG+"GDPR","Error == null")
-                if(!mySharedPref.isContestGiven) {
-                    AppOpenManager(application, applicationContext,mySharedPref,BuildConfig.DEBUG)
-                    mySharedPref.isContestGiven = true
-                }
+//                if(!mySharedPref.isContestGiven) {
+//                    AppOpenManagerOld(
+//                        application,
+//                        applicationContext,
+//                        mySharedPref,
+//                        BuildConfig.DEBUG
+//                    )
+//                    mySharedPref.isContestGiven = true
+//                }
+                mySharedPref.isContestGiven = true
                 onConsentResponse.onConsentSuccess()
             }
         }
@@ -322,6 +325,34 @@ class AddInitilizer {
                     super.onAdImpression()
                 }
             }
+
+            try{
+                adView.setOnPaidEventListener { adValue ->
+                    val revenue =
+                        adValue.getValueMicros() / 1000000.0
+                    val currency = adValue.getCurrencyCode()
+                    val listener = listener
+                    if (listener != null) {
+                        try{
+                            listener.onAdRevenuePaid(
+                                revenue,
+                                currency,
+                                "banner",
+                                if (activity != null)
+                                    activity!!.javaClass.getSimpleName()
+                                else
+                                    "unknown",
+                                false
+                            )
+                        }catch (e : Exception){
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
+
             val adRequest = AdRequest.Builder().build()
             adView.setAdSize(getAdSize())
             adView.loadAd(adRequest)
@@ -466,6 +497,36 @@ class AddInitilizer {
                         try{
                             hidePRogressDialog()
                             currentAdCounter = 0;
+                            try{
+                                mInterstitialAd?.setOnPaidEventListener { adValue ->
+                                    try{
+                                        val revenue =
+                                            adValue.getValueMicros() / 1000000.0
+                                        val currency = adValue.getCurrencyCode()
+                                        val listener = listener
+                                        if (listener != null) {
+                                            try{
+                                                listener.onAdRevenuePaid(
+                                                    revenue,
+                                                    currency,
+                                                    "interstitial",
+                                                    if (activity != null)
+                                                        activity!!.javaClass.getSimpleName()
+                                                    else
+                                                        "unknown",
+                                                    false
+                                                )
+                                            }catch (e : Exception){
+                                                e.printStackTrace()
+                                            }
+                                        }
+                                    }catch (e : Exception){
+                                        e.printStackTrace()
+                                    }
+                                }
+                            }catch (e : Exception){
+                                e.printStackTrace()
+                            }
                             mInterstitialAd!!.show(activity!!)
                             mInterstitialAd!!.setFullScreenContentCallback(object :
                                 FullScreenContentCallback() {
@@ -703,10 +764,10 @@ class AddInitilizer {
             MobileAds.initialize(context) {}
         }
 
-        fun startAppOpenAd(application: android.app.Application,applicationContext : Context,mySharedPref: MySharedPref,isDebugRunning: Boolean){
-            if(mySharedPref.isContestGiven)
-                AppOpenManager(application, applicationContext,mySharedPref,BuildConfig.DEBUG)
-        }
+//        fun startAppOpenAd(application: android.app.Application,applicationContext : Context,mySharedPref: MySharedPref,isDebugRunning: Boolean){
+//            if(mySharedPref.isContestGiven)
+//                AppOpenManagerOld(application, applicationContext, mySharedPref, BuildConfig.DEBUG)
+//        }
 //        var instance : AddInitilizer? = null
 //        fun getInstance(context: Context,activity: Activity? ,isDebugRunning : Boolean) : AddInitilizer{
 //            if(instance == null)
@@ -721,7 +782,7 @@ class AddInitilizer {
     }
 
     fun canRequestAd() : Boolean{
-        val canRequestAd =  googleMobileAdsConsentManager.canRequestAds
+        val canRequestAd =  googleMobileAdsConsentManager.canRequestAds()
         Log.e(TAG,"can request ad $canRequestAd")
         return canRequestAd
     }

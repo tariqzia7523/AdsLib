@@ -15,24 +15,28 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        AppOpenManager.onSplashCallBack = this
-        AppOpenManager.callAppOpenAddOnlyOnce = false
+//        AppOpenManagerOld.onSplashCallBack = this
+//        AppOpenManagerOld.callAppOpenAddOnlyOnce = false
+        addInitilizer = AddInitilizer(applicationContext,this, BuildConfig.DEBUG)
         val mySharedPref = MySharedPref(this)
         mySharedPref.bannerID = "orignal_banner_id"
         mySharedPref.rewardID = "orignal_reward_id"
         mySharedPref.nativeID = "orignal_native_id"
         mySharedPref.interID = "orignal_interstitial_id"
         AddInitilizer.adCounter = 0
-        AddInitilizer.startAppOpenAd(application,applicationContext,mySharedPref,true)
+//        AddInitilizer.startAppOpenAd(application,applicationContext,mySharedPref,true)
         AddInitilizer(applicationContext,this,true).getGDPRConsent(application,applicationContext,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
             override fun onConsentSuccess() {
+                (application as App).initAppOpenAfterConsent(
+                    AddIds.getAppOpenId(mySharedPref, BuildConfig.DEBUG)
+                )
                 Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
-                //TODO("Not yet implemented")
+
             }
 
             override fun onConsentFailure(code: Int, message: String) {
                 Toast.makeText(this@SplashActivity, "failure", Toast.LENGTH_SHORT).show()
-                //TODO("Not yet implemented")
+
             }
         })
 
@@ -43,10 +47,7 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
 
         findViewById<View>(R.id.move_text).setOnClickListener {
             addInitilizer!!.showInterstailAdd("test")
-
         }
-
-
 
     }
 
@@ -89,12 +90,12 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack , OnSplashCallBac
     }
 
     override fun onCallBack(key: String?) {
-        AppOpenManager.onSplashCallBack =  null
+//        AppOpenManagerOld.onSplashCallBack =  null
         startActivity(Intent(this@SplashActivity,MainActivity::class.java))
     }
 
     override fun afterOpenAddCallBack() {
-        AppOpenManager.onSplashCallBack =  null
+//        AppOpenManagerOld.onSplashCallBack =  null
         startActivity(Intent(this@SplashActivity,MainActivity::class.java))
     }
 

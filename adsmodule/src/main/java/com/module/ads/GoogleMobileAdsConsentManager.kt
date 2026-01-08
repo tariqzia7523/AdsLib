@@ -18,8 +18,11 @@ class GoogleMobileAdsConsentManager constructor(context: Context) {
         fun consentGatheringComplete(error: FormError?)
     }
 
-    val canRequestAds: Boolean
-        get() = consentInformation.canRequestAds()
+//    val canRequestAds: Boolean get() = consentInformation.canRequestAds()
+
+    fun canRequestAds() : Boolean {
+        return consentInformation.canRequestAds()
+    }
 
     val isPrivacyOptionsRequired: Boolean
         get() =
