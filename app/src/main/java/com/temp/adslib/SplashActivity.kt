@@ -28,7 +28,8 @@ class SplashActivity : AppCompatActivity(),OnAdsClosedCallBack {
         AddInitilizer(applicationContext,this,true).getGDPRConsent(application,applicationContext,"ca-app-pub-3940256099942544~3347511713",object : OnConsentResponse{
             override fun onConsentSuccess() {
                 (application as App).initAppOpenAfterConsent(
-                    AddIds.getAppOpenId(mySharedPref, BuildConfig.DEBUG)
+                    AddIds.getAppOpenId(mySharedPref, BuildConfig.DEBUG),
+                    this@SplashActivity
                 )
                 Toast.makeText(this@SplashActivity, "Suusess", Toast.LENGTH_SHORT).show()
 

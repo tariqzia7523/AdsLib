@@ -45,12 +45,11 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.module.ads.AdRevenueDispatcher.listener
-import java.util.Arrays
 import java.util.concurrent.atomic.AtomicBoolean
 
 
 class AddInitilizer {
-    // new version 14 jan 2026
+    // new version 06 Apr 2026
     lateinit var context: Context
     private val isMobileAdsInitializeCalled : AtomicBoolean
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
@@ -434,13 +433,13 @@ class AddInitilizer {
     fun showInterstailAdd(key :String){
         gloabalSelectedKey = key
         if(!canRequestAd()){
-            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+            onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
             return
         }
         if(currentAdCounter < adCounter){
             currentAdCounter += 1;
             Log.e(TAG,"currant ad counter "+ currentAdCounter)
-            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+            onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
             return
         }
 
@@ -536,7 +535,7 @@ class AddInitilizer {
 //                                startactivity!!(globelintent)
                                     isInterAddLoading = false
                                     hidePRogressDialog()
-                                    onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+                                    onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
 //                                    loadIntersitialAdd()
                                 }
 
@@ -545,7 +544,7 @@ class AddInitilizer {
                                     Log.e(TAG, "The ad failed to show.")
                                     isInterAddLoading = false
                                     hidePRogressDialog()
-                                    onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+                                    onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
                                 }
 
                                 override fun onAdShowedFullScreenContent() {
@@ -559,7 +558,7 @@ class AddInitilizer {
                             })
                         }catch (e : Exception){
                             e.printStackTrace()
-                            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+                            onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
                         }
 
 //                        mInterstitialAd!!.show(activity!!)
@@ -571,11 +570,11 @@ class AddInitilizer {
                         isInterAddLoading = false
                         mInterstitialAd = null
                         hidePRogressDialog()
-                        onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+                        onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
                     }
                 })
         }else{
-            onAdsClosedCallBack!!.onCallBack(gloabalSelectedKey)
+            onAdsClosedCallBack?.onCallBack(gloabalSelectedKey)
         }
 
     }
@@ -776,8 +775,11 @@ class AddInitilizer {
 //            return instance!!
 //        }
 
-        fun addDevice(id: String){
-            RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(id))
+        fun addDevice(id: String) {
+            val cfg = RequestConfiguration.Builder()
+                .setTestDeviceIds(listOf(id))
+                .build()
+            MobileAds.setRequestConfiguration(cfg)
         }
     }
 

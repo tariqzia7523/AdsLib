@@ -1,5 +1,6 @@
 package com.temp.adslib
 
+import android.app.Activity
 import android.app.Application
 import android.util.Log
 import com.module.ads.AdRevenueDispatcher
@@ -33,14 +34,14 @@ class App : Application() {
 
     }
 
-    fun initAppOpenAfterConsent(adUnitId: String) {
-        if(!isLoadingCalled){
-            Log.e("***AppOpen","app open called ")
-            appOpenAdManager = AppOpenAdManager(
-                this,
-                adUnitId,
-                consentManager
-            )
+    fun initAppOpenAfterConsent(adUnitId: String, seedActivity: Activity? = null) {
+        if (!isLoadingCalled) {
+            Log.e("***AppOpen", "app open called ")
+            appOpenAdManager = if (seedActivity != null) {
+                AppOpenAdManager(this, adUnitId, consentManager, seedActivity)
+            } else {
+                AppOpenAdManager(this, adUnitId, consentManager)
+            }
             isLoadingCalled = true
         }
     }

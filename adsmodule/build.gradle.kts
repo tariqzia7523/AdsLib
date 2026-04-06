@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,7 +84,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.tariqzia7523"
                 artifactId = "AdsLib"
-                version = "3.0.4"
+                version = "7.0.8"
             }
         }
     }
