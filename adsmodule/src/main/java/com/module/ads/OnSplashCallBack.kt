@@ -1,11 +1,13 @@
 package com.module.ads
 
 /**
- * Optional global callback after the app-open flow **ends** (user dismissed the ad, or show failed).
- * Set via [AppOpenAdManager.setOnSplashCallBack] from your Application or splash screen so you can
- * continue navigation (e.g. `NavController.navigate`) in MVVM apps.
+ * Set via [AppOpenAdManager.setOnSplashCallBack] **before** creating [AppOpenAdManager] on cold start
+ * (e.g. from your splash activity right after consent). The library invokes
+ * [afterOpenAddCallBack] **exactly once** when the app-open attempt for that launch is finished:
+ * the user dismissed the ad, show failed, load failed, no ad unit, consent/premium/session rules
+ * block showing, the host activity is missing, or the activity predicate blocked the show.
  *
- * Not invoked when no ad was shown because the session already had an impression or the user is premium.
+ * You should navigate to the home screen from this callback (no arbitrary timeouts needed).
  */
 interface OnSplashCallBack {
     fun afterOpenAddCallBack()

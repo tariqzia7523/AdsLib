@@ -84,7 +84,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.tariqzia7523"
                 artifactId = "AdsLib"
-                version = "7.0.8"
+                version = "7.0.9"
             }
         }
     }
